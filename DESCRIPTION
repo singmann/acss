@@ -1,0 +1,13 @@
+Package: complexity
+Type: Package
+Title: What the package does (short line)
+Version: 0.1
+Date: 2013-11-17
+Authors@R: c( person("Nicolas", "Gauvrit", role = "aut"), person("Henrik",
+    "Singmann", email = "henrik.singmann@psychologie.uni-freiburg.de", role =
+    c("aut", "cre")))
+Description: More about what it does (maybe more than one line)
+License: GPL (>= 2)
+Collate:
+    'helper.R'
+    'standard_complexity.R'
