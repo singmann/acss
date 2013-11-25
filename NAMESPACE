@@ -1,5 +1,6 @@
+export(alternations)
 export(change_complexity)
-export(CountClass)
+export(count_class)
 export(entropy)
 export(entropy2)
 export(normalize)
