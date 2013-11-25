@@ -12,8 +12,8 @@
 }
 \arguments{
   \item{string}{\code{character} vector containing the to
-  be analyzed and normalized strings (can contain multiple
-  strings for the entropy measures).}
+  be analyzed strings (can contain multiple strings for the
+  entropy measures).}
 }
 \value{
   \code{numeric}, the complexity of the string. For
@@ -48,7 +48,7 @@ strings1 <- c("010011010001", "0010203928837", "0000000000")
 strings2 <- c("001011", "01213", "010101010101")
 
 entropy(strings1)
-entropy(normalize(c("HUHHEGGTE", "EGGHHU")))
+entropy(c("HUHHEGGTE", "EGGHHU"))
 
 entropy2(strings2)
 

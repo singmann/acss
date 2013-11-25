@@ -8,7 +8,7 @@
 #' 
 #' change_complexity(string)
 #' 
-#' @param string \code{character} vector containing the to be analyzed and normalized strings (can contain multiple strings for the entropy measures).
+#' @param string \code{character} vector containing the to be analyzed strings (can contain multiple strings for the entropy measures).
 #' 
 #' @return \code{numeric}, the complexity of the string. For \code{entropy} and \code{entropy2} of the same length as \code{string}. \code{change_complexity} currently only works with inputs of length 1.
 #' 
@@ -27,7 +27,7 @@
 #' strings2 <- c("001011", "01213", "010101010101")
 #' 
 #' entropy(strings1)
-#' entropy(normalize(c("HUHHEGGTE", "EGGHHU")))
+#' entropy(c("HUHHEGGTE", "EGGHHU"))
 #' 
 #' entropy2(strings2)
 #' 
