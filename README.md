@@ -1,4 +1,4 @@
-complexity: measures of algorithmic complexity in R. 
+acss: measures of algorithmic complexity in R. 
 ====
 
 ## Features
@@ -11,5 +11,5 @@ complexity: measures of algorithmic complexity in R.
 
 * Development version from Github:
 ```
-library("devtools"); install_github("complexity",user="singmann")
+library("devtools"); install_github("acss",user="singmann")
 ```
