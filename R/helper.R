@@ -53,7 +53,7 @@ normalize <- function(string){
   elements <- lapply(splitted, unique)
   if (any(vapply(elements, length, 0)>10)) stop("two many symbols (more than 10)")
   exchanged <- mapply(function(x, y) seq(0, length.out = length(x))[match(y, x)], elements, splitted, SIMPLIFY=FALSE)  
-  vapply(exchanged, paste, "", collapse = "")
+  data.frame(string = vapply(exchanged, paste, "", collapse = ""), symbols = vapply(exchanged, max, 0)+1, stringsAsFactors = FALSE)
 }
 
 
@@ -62,7 +62,7 @@ normalize <- function(string){
 # str is a string, n the number of possible symbols (not necessarily actually appearing in str).
 # str must be normalized (or add the 2d line)
 count_class <- function(string,n){
-	string <- normalize(string) # needs not be done for normalized strings
+	string <- normalize(string)$string # needs not be done for normalized strings
 	splitted <- lapply(strsplit(string, ""), as.numeric)
   k <- vapply(splitted, max, 0) + 1
   if (any(k > n)) stop("n needs to be larger as the number of elements in each string.")

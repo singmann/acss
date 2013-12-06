@@ -4,11 +4,11 @@
 \alias{entropy2}
 \title{Standard measures of complexity for strings}
 \usage{
-  entropy(string)
+entropy(string)
 
-  entropy2(string)
+entropy2(string)
 
-  change_complexity(string)
+change_complexity(string)
 }
 \arguments{
   \item{string}{\code{character} vector containing the to
@@ -16,32 +16,32 @@
   entropy measures).}
 }
 \value{
-  \code{numeric}, the complexity of the string. For
-  \code{entropy} and \code{entropy2} of the same length as
-  \code{string}. \code{change_complexity} currently only
-  works with inputs of length 1.
+\code{numeric}, the complexity of the string. For
+\code{entropy} and \code{entropy2} of the same length as
+\code{string}. \code{change_complexity} currently only
+works with inputs of length 1.
 }
 \description{
-  Functions to compute different measures of complexity for
-  strings: Entropy, Second-Order Entropy, and Change
-  Complexity
+Functions to compute different measures of complexity for
+strings: Entropy, Second-Order Entropy, and Change
+Complexity
 }
 \details{
-  For users who need advanced functions, a comprehensive
-  package computing various versions of entropy estimators
-  is available \pkg{entropy}. For users who just need first
-  and second-order entropy and which to apply them to short
-  string, the \pkg{ACSS} package provides two functions:
-  \code{entropy} (first-order entropy) and \code{entropy2}
-  second-order entropy.
+For users who need advanced functions, a comprehensive
+package computing various versions of entropy estimators is
+available \pkg{entropy}. For users who just need first and
+second-order entropy and which to apply them to short
+string, the \pkg{ACSS} package provides two functions:
+\code{entropy} (first-order entropy) and \code{entropy2}
+second-order entropy.
 
-  Change complexity (\code{change_complexity}) assesses
-  cognitive complexity or the subjective perception of
-  complexity of a binary string. It has been
-  comprehensively defined by Aksentijevic and Gibson
-  (2012). Although the algorithm will work with any number
-  of symbols up to 10, the rationale of Change Complexity
-  only applies to binary strings.
+Change complexity (\code{change_complexity}) assesses
+cognitive complexity or the subjective perception of
+complexity of a binary string. It has been comprehensively
+defined by Aksentijevic and Gibson (2012). Although the
+algorithm will work with any number of symbols up to 10,
+the rationale of Change Complexity only applies to binary
+strings.
 }
 \examples{
 strings1 <- c("010011010001", "0010203928837", "0000000000")
@@ -55,7 +55,7 @@ entropy2(strings2)
 change_complexity("01100100")
 }
 \references{
-  Aksentijevic & Gibson (2012). Complexity equals change.
-  \emph{Cognitive Systems Research}, 15-17, 1-16.
+Aksentijevic & Gibson (2012). Complexity equals change.
+\emph{Cognitive Systems Research}, 15-17, 1-16.
 }
 
