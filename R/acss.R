@@ -61,7 +61,7 @@ local_complexity <- function(string, span = 5, n = 9) {
   #l <- nchar(string)
   splitted <- strsplit(string,"")
   
-  new.string <- lapply(splitted, function(x) rollapply(x, width = 5, FUN = paste0, collapse = ""))
+  new.string <- lapply(splitted, function(x) rollapply(x, width = span, FUN = paste0, collapse = ""))
   
   tmp <- lapply(new.string, function(x) acss(x, n = n)$K)
   names(tmp) <- string
