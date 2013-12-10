@@ -11,5 +11,5 @@ acss: measures of algorithmic complexity in R.
 
 * Development version from Github:
 ```
-library("devtools"); install_github("acss",user="singmann")
+library("devtools"); install_github("acss",user="singmann", ref = "memory"))
 ```
