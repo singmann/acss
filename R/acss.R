@@ -9,7 +9,7 @@
 #' local_complexity(string, span = 5, n = 9)
 #' 
 #' @param string \code{character} vector containing the to be analyzed strings (can contain multiple strings).
-#' @param n \code{numeric}, the number of possible symbols (not necessarily actually appearing in str). Must be one of \code{c(2, 4, 5, 6, 9)}. Default is 9.
+#' @param n \code{numeric}, the number of possible symbols (not necessarily actually appearing in str). Must be one of \code{c(2, 4, 5, 6, 9)} (can also be \code{NULL} or contain multiple values for \code{acss}). Default is 9.
 #' @param prior \code{numeric},  the prior probability that the underlying process is randomness.
 #' @param span size of substrings to be created from \code{string}.
 #' 
@@ -75,7 +75,7 @@ acss <- function(string, n = 9) {
   string <- normalize(string)
   if (is.null(n)) tmp <- acss_data[string,]  
   else {
-    if (!(n %in% c(2, 4, 5, 6, 9))) stop("n must be in c(2, 4, 5, 6, 9)")
+    if (any(!(n %in% c(2, 4, 5, 6, 9)))) stop("n must be in c(2, 4, 5, 6, 9)")
     tmp <- acss_data[string, paste("K", n , sep = "."), drop = FALSE]
   }
   D <- apply(tmp, c(1,2), function(x) 2^(-x))

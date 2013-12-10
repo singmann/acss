@@ -16,7 +16,8 @@ local_complexity(string, span = 5, n = 9)
 
   \item{n}{\code{numeric}, the number of possible symbols
   (not necessarily actually appearing in str). Must be one
-  of \code{c(2, 4, 5, 6, 9)}. Default is 9.}
+  of \code{c(2, 4, 5, 6, 9)} (can also be \code{NULL} or
+  contain multiple values for \code{acss}). Default is 9.}
 
   \item{prior}{\code{numeric}, the prior probability that
   the underlying process is randomness.}
