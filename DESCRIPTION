@@ -9,7 +9,11 @@ Authors@R: c( person("Nicolas", "Gauvrit", role = "aut"),
     person("Henrik", "Singmann",
     email = "henrik.singmann@psychologie.uni-freiburg.de", role =
     c("aut", "cre")))
+LazyData: yes
+LazyDataCompression: xz
+Imports:
+    zoo
 Depends:
-    filehashSQLite
+    R (>= 2.10)
 Description: More about what it does (maybe more than one line)
 License: GPL (>= 2)
