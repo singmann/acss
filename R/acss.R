@@ -69,6 +69,8 @@
 #' @aliases acss prob_random local_complexity
 #' @export acss prob_random local_complexity
 #' @importFrom zoo rollapply
+#' @import acss.data
+#' 
 
 
 acss <- function(string, n = 9) {
