@@ -31,7 +31,7 @@ For users who need advanced functions, a comprehensive
 package computing various versions of entropy estimators is
 available \pkg{entropy}. For users who just need first and
 second-order entropy and which to apply them to short
-string, the \pkg{ACSS} package provides two functions:
+string, the \pkg{acss} package provides two functions:
 \code{entropy} (first-order entropy) and \code{entropy2}
 second-order entropy.
 
