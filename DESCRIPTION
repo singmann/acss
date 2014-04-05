@@ -7,7 +7,7 @@ Authors@R: c( person("Nicolas", "Gauvrit", role = "aut"),
     person("Fernando", "Soler Toscano", role = "aut"),
     person("Hector", "Zenil", role = "aut"),
     person("Henrik", "Singmann",
-    email = "henrik.singmann@psychologie.uni-freiburg.de", role =
+    email = "singmann@gmail.com", role =
     c("aut", "cre")))
 Imports:
     zoo
