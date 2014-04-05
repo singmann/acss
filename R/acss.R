@@ -13,6 +13,13 @@
 #' @param prior \code{numeric},  the prior probability that the underlying process is randomness.
 #' @param span size of substrings to be created from \code{string}.
 #' 
+#' @return
+#' \describe{
+#'   \item{"acss"}{A matrix in which the rows correspond to the strings entered and the columns to the algorithmic complexity K and the algorithmic probability D of the string (see \url{http://complexitycalculator.com/methodology.html}).}
+#'   \item{"prob_random"}{A named vector with the probabilities that each string was produced by a random process (and not a Turing Machine) given the provided prior for being produced by a random process (default is 0.5).}
+#'   \item{"local_complexity"}{A list with elements corresponding to the strings. Each list containes a named vector of algorithmic complexities (K) of all substrings in each string with length span.}
+#'   }
+#' 
 #' @details The algorithmic complexity is computed using the coding theorem method: For a given set of symbols in a string, all possible or a large number of random samples of Turing machines (TM) with a given number of states (e.g., 5) and number of symbols corresponding to the number of symbols in the strings were simulated until they reached a halting state or failed to end. This package accesses a database containing data on 4.5 million strings from length 1 to 12 simulated on TMs with 2, 4, 5, 6, and 9 symbols. The complexity of the string corresponds to the distribution of the halting states of the TMs.
 #' 
 #' See \url{http://complexitycalculator.com/methodology.html} for more information or references below.
@@ -76,6 +83,9 @@ local_complexity <- function(string, span = 5, n = 9) {
   splitted <- strsplit(string,"")  
   new.string <- lapply(splitted, function(x) rollapply(x, width = span, FUN = paste0, collapse = ""))  
   tmp <- lapply(new.string, function(x) acss(x, n = n)[,paste0("K.", n)])
+  tmp <- mapply(function(x,y) {
+    names(x) <- y
+    return(x)}, tmp, new.string)
   names(tmp) <- string
   tmp
 }
