@@ -55,13 +55,17 @@ seconds).
 }
 \examples{
 
+# WARNING: The first call to one of the functions
+# discussed on this page loads a large data set 
+# and usually takes > 10 seconds. Stay patient.
+
 acss(c("HEHHEE", "GHHGGHGHH", "HSHSHHSHSS"))
 ##                 K.9          D.9
 ## HEHHEE     23.38852 9.106564e-08
 ## GHHGGHGHH  33.50168 8.222205e-11
 ## HSHSHHSHSS 35.15241 2.618613e-11
 
-acss(c("HEHHEE", "GHHGGHGHH", "HSHSHHSHSS"))$K
+acss(c("HEHHEE", "GHHGGHGHH", "HSHSHHSHSS"))$K.9
 ## [1] 23.38852 33.50168 35.15241
 
 acss(c("HEHHEE", "GHHGGHGHH", "HSHSHHSHSS"), n = 2)
@@ -84,6 +88,7 @@ acss(c("HEHHEE", "GHHGGHGHUE", "HSHSHHSHSS"), NULL)
 ## GHHGGHGHUE 4.209915e-12
 ## HSHSHHSHSS 2.618613e-11
 
+\dontrun{
 prob_random(c("HEHHEE", "GHHGGHGHUE", "HSHSHHSHSS"))
 ##     HEHHEE GHHGGHGHUE HSHSHHSHSS 
 ## 0.31223451 0.09675417 0.01692974 
@@ -91,6 +96,7 @@ prob_random(c("HEHHEE", "GHHGGHGHUE", "HSHSHHSHSS"))
 prob_random(c("HEHHEE", "GHHGGHGHUE", "HSHSHHSHSS"), n = 5)
 ##     HEHHEE GHHGGHGHUE HSHSHHSHSS 
 ## 0.39406436 0.30998532 0.07441426 
+}
 
 local_complexity(c("01011010111" ,"GHHGGHGHUE"), span=5, n = 5)
 ## $`01011010111`

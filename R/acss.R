@@ -57,14 +57,14 @@ prob_random <- function(string, n = 9, prior= 0.5){
   rn <- nchar(rownames(acss_data))
   subtables <- lapply(lu, function(x) {
     tmp <- acss_data[rn == x, paste0("K.", n), drop = FALSE]
-    tmp <- tmp[!is.na(tmp$K),,drop = FALSE]
+    tmp <- tmp[!is.na(tmp[,paste0("K.", n)]),,drop = FALSE]
     tmp$count <- count_class(rownames(tmp), n = n)
-    tmp$D <- 2^(-tmp$K)
+    tmp$D <- 2^(-tmp[,paste0("K.", n)])
     tmp
   })
   ptot <- vapply(subtables, function(x) sum(x$count*x$D), 0)
   psgivenr <- (1/n^lu)[match(l, lu)]
-  psgiventm <- acss(string, n = n)$D/ptot[match(l, lu)]
+  psgiventm <- acss(string, n = n)[,paste0("D.", n)]/ptot[match(l, lu)]
   tmp <- psgivenr*prior/(psgivenr*prior+psgiventm*(1-prior))
   names(tmp) <- string
   tmp
@@ -75,7 +75,7 @@ local_complexity <- function(string, span = 5, n = 9) {
   #l <- nchar(string)
   splitted <- strsplit(string,"")  
   new.string <- lapply(splitted, function(x) rollapply(x, width = span, FUN = paste0, collapse = ""))  
-  tmp <- lapply(new.string, function(x) acss(x, n = n)$K)
+  tmp <- lapply(new.string, function(x) acss(x, n = n)[,paste0("K.", n)])
   names(tmp) <- string
   tmp
 }
