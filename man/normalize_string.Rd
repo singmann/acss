@@ -1,10 +1,10 @@
-\name{normalize}
+\name{normalize_string}
 \alias{alternations}
 \alias{count_class}
-\alias{normalize}
+\alias{normalize_string}
 \title{Helper functions for calculating cognitive complexity.}
 \usage{
-normalize(string)
+normalize_string(string)
 
 count_class(string, n)
 
@@ -24,8 +24,8 @@ alternations(string, proportion = FALSE)
   raw values).}
 }
 \value{
-\describe{ \item{\code{normalize}}{A normalized vector of
-strings of the same length as \code{string}.}
+\describe{ \item{\code{normalize_string}}{A normalized
+vector of strings of the same length as \code{string}.}
 \item{\code{count_class}}{A vector of the same length as
 \code{string} with the number of possible equaivalent
 strings when \code{string} is normalized and considering
@@ -34,13 +34,13 @@ number (or proprtion) of alternations of the same length as
 \code{string}} }
 }
 \description{
-\code{normalize} takes a character vector and normalizes
-its input using the symbols 0, 1, 2...9. \code{count_class}
-takes a character vector and an integer \code{n} (with the
-restriction that the number of different symbols in the
-character vector doesn't exceed \code{n}) and returns the
-total number of strings that are equivalent to the input
-when normalized and considering \code{n}.
+\code{normalize_string} takes a character vector and
+normalizes its input using the symbols 0, 1, 2...9.
+\code{count_class} takes a character vector and an integer
+\code{n} (with the restriction that the number of different
+symbols in the character vector doesn't exceed \code{n})
+and returns the total number of strings that are equivalent
+to the input when normalized and considering \code{n}.
 \code{alternations} returns the number of alternations of
 symbols in a string.
 }
@@ -48,10 +48,10 @@ symbols in a string.
 nothing yet.
 }
 \examples{
-#normalize:
-normalize(c("HUHHEGGTE", "EGGHHU"))
+#normalize_string:
+normalize_string(c("HUHHEGGTE", "EGGHHU"))
 
-normalize("293948837163536")
+normalize_string("293948837163536")
 
 # count_class
 count_class("010011",2)

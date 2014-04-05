@@ -74,7 +74,7 @@
 
 
 acss <- function(string, n = 9) {
-  string <- normalize(string)
+  string <- normalize_string(string)
   if (is.null(n)) tmp <- acss_data[string,]  
   else {
     if (any(!(n %in% c(2, 4, 5, 6, 9)))) stop("n must be in c(2, 4, 5, 6, 9)")

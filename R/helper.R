@@ -1,8 +1,8 @@
 #' Helper functions for calculating cognitive complexity.
 #'
-#' \code{normalize} takes a character vector and normalizes its input using the symbols 0, 1, 2...9. \code{count_class} takes a character vector and an integer \code{n} (with the restriction that the number of different symbols in the character vector doesn't exceed \code{n}) and returns  the total number of strings that are equivalent to the input when normalized and considering \code{n}. \code{alternations} returns the number of alternations of symbols in a string.
+#' \code{normalize_string} takes a character vector and normalizes its input using the symbols 0, 1, 2...9. \code{count_class} takes a character vector and an integer \code{n} (with the restriction that the number of different symbols in the character vector doesn't exceed \code{n}) and returns  the total number of strings that are equivalent to the input when normalized and considering \code{n}. \code{alternations} returns the number of alternations of symbols in a string.
 #'
-#' @usage normalize(string)
+#' @usage normalize_string(string)
 #'
 #' count_class(string, n)
 #' 
@@ -14,23 +14,23 @@
 #' 
 #' @return 
 #' \describe{
-#'  \item{\code{normalize}}{A normalized vector of strings of the same length as \code{string}.}
+#'  \item{\code{normalize_string}}{A normalized vector of strings of the same length as \code{string}.}
 #'  \item{\code{count_class}}{A vector of the same length as \code{string} with the number of possible equaivalent strings when \code{string} is normalized and considering \code{n}.}
 #'  \item{\code{alternations}}{A vector with the number (or proprtion) of alternations of the same length as \code{string}}
 #' }
 #' 
 #' @details nothing yet.
 #' 
-#' @name normalize
-#' @aliases normalize count_class alternations
-#' @export normalize count_class alternations
+#' @name normalize_string
+#' @aliases normalize_string count_class alternations
+#' @export normalize_string count_class alternations
 #' 
 #' @examples
 #' 
-#' #normalize:
-#' normalize(c("HUHHEGGTE", "EGGHHU"))
+#' #normalize_string:
+#' normalize_string(c("HUHHEGGTE", "EGGHHU"))
 #' 
-#' normalize("293948837163536")
+#' normalize_string("293948837163536")
 #' 
 #' # count_class
 #' count_class("010011",2)
@@ -48,7 +48,7 @@
 #' alternations(c("HUHHEGGTE", "EGGHHU"), proportion = TRUE)
 #' 
 
-normalize <- function(string){
+normalize_string <- function(string){
   splitted <- strsplit(string, "")
   elements <- lapply(splitted, unique)
   if (any(vapply(elements, length, 0)>10)) stop("two many symbols (more than 10)")
@@ -63,7 +63,7 @@ normalize <- function(string){
 # str is a string, n the number of possible symbols (not necessarily actually appearing in str).
 # str must be normalized (or add the 2d line)
 count_class <- function(string,n){
-	string <- normalize(string) # needs not be done for normalized strings
+	string <- normalize_string(string) # needs not be done for normalized strings
 	splitted <- lapply(strsplit(string, ""), as.numeric)
   k <- vapply(splitted, max, 0) + 1
   max(k)
