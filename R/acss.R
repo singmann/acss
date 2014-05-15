@@ -42,7 +42,9 @@
 #' 
 
 
-acss <- function(string, n = 9) {
+acss <- function(string, n = 9) { #, return = "matrix") {
+  check_string(string)
+#  return <- match.arg(return, c("matrix", "data.frame"))
   names <- string
   string <- normalize_string(string)
   if (is.null(n)) tmp <- acss_data[string,]  
@@ -50,15 +52,23 @@ acss <- function(string, n = 9) {
     if (any(!(n %in% c(2, 4, 5, 6, 9)))) stop("n must be in c(2, 4, 5, 6, 9)")
     tmp <- acss_data[string, paste("K", n , sep = "."), drop = FALSE]
   }
-  rownames(tmp) <- make.unique(names)
   D <- apply(tmp, c(1,2), function(x) 2^(-x))
   colnames(D) <- paste0("D.", substr(colnames(D), 3, 3))  
-  cbind(tmp, D)
+#  if (return == "matrix") {
+    tmp <- as.matrix(cbind(tmp, D))  
+    rownames(tmp) <- names
+    return(tmp)
+#   } else if (return == "data.frame") {
+#     tmp <- cbind(tmp, D)
+#     rownames(tmp) <- make.unique(names)
+#     return(tmp)
+#   }
 }
 
 
 prob_random <- function(string, n = 9, prior= 0.5){
   if (!(n %in% c(2, 4, 5, 6, 9))) stop("n must be in c(2, 4, 5, 6, 9)")
+  check_string(string)
   l <- nchar(string)
   lu <- unique(l)
   rn <- nchar(rownames(acss_data))
@@ -78,6 +88,7 @@ prob_random <- function(string, n = 9, prior= 0.5){
 }
 
 local_complexity <- function(string, span = 5, n = 9) {
+  check_string(string)
   #browser()
   #l <- nchar(string)
   splitted <- strsplit(string,"")  
@@ -85,7 +96,8 @@ local_complexity <- function(string, span = 5, n = 9) {
   tmp <- lapply(new.string, function(x) acss(x, n = n)[,paste0("K.", n)])
   tmp <- mapply(function(x,y) {
     names(x) <- y
-    return(x)}, tmp, new.string)
+    return(x)}, tmp, new.string, SIMPLIFY = FALSE)
+  #names(tmp) <- make.unique(string)
   names(tmp) <- string
   tmp
 }

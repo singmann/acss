@@ -84,3 +84,6 @@ alternations <- function(string, proportion = FALSE)  # if prop=FALSE, returns t
 }
 
 
+check_string <- function(string) {
+  if (!is.vector(string, mode = "character")) stop("string must be a character vector.")
+}

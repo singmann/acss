@@ -31,23 +31,27 @@
 # there is a package already : http://cran.r-project.org/web/packages/entropy/entropy.pdf
 # but it is too complicated for our purpose.
 entropy <- function(string){
+  check_string(string)
   splitted <- strsplit(string,"")
   y <- lapply(splitted, function(x) as.vector(table(x)))
   l <- nchar(string)
-  y <- mapply(function(x, y) x/y, y, l)
+  y <- mapply(function(x, y) x/y, y, l, SIMPLIFY=FALSE)
+  names(y) <- string
   vapply(y, function(x) -sum(x*log2(x)), 0)
 }
 
 ########## Second order entropy
 # There are different ways to compute second order entropy. Because we have small strings, I prefer using a sliding window of 2 symbols.
 entropy2 <- function(string){
+  check_string(string)
   l <- nchar(string)
   if (any(l < 2)) stop("length of strings need to be > 1.")
   splitted <- strsplit(string,"")
   new.string <- lapply(splitted, function(x) paste0(x[-length(x)], x[-1]))
   y <- lapply(new.string, function(x) as.vector(table(x)))
   l <- vapply(new.string, length, 0)
-  y <- mapply(function(x, y) x/y, y, l)
+  y <- mapply(function(x, y) x/y, y, l, SIMPLIFY=FALSE)
+  names(y) <- string
   vapply(y, function(x) -sum(x*log2(x)), 0)  
 }
 
@@ -55,8 +59,12 @@ entropy2 <- function(string){
 # ref : Aksentijevic & Gibson (2012) Complexity equals change, Cognitive Systems Research, 15-17, 1-16
 ## change complexity for a binary string s
 
+change_complexity <- function(string) {
+  check_string(string)
+  vapply(string, .change_complexity, 0)
+}
 
-change_complexity <- function(string){
+.change_complexity <- function(string){
   #browser()
   l <- nchar(string)
   if (any(l<3)){stop("length of strings need to be > 2.")}
@@ -82,7 +90,7 @@ change_complexity <- function(string){
   for (i in 1:l-1){p[i]=sum(m[,i])
                    w[i]=1/(l-i)}
   C=sum(p*w)
-  
+  names(C) <- string
   return(C)
 }
 
