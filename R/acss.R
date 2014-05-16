@@ -115,6 +115,8 @@ prob_random <- function(string, n = 9, prior= 0.5){
 
 local_complexity <- function(string, span = 5, n = 9) {
   check_string(string)
+  if (length(n) > 1) stop("'n' needs to be of length 1.")
+  if (!(n %in% c(2, 4, 5, 6, 9))) stop("n must be in c(2, 4, 5, 6, 9)")
   if (span < 2 | span > 12) stop("span needs to be between 2 and 12 (inclusive).")
   #browser()
   #l <- nchar(string)
