@@ -2,22 +2,28 @@
 #' 
 #' Functions to conveniently compute algorithmic complexity for short string, an approximation of the Kolmogorov Complexity of a short string using the coding theorem method.
 #' 
-#' @usage acss(string, n)
-#' 
-#' prob_random(string, n = 9, prior= 0.5)
+#' @usage acss(string, n = 9)
 #' 
 #' local_complexity(string, span = 5, n = 9)
 #' 
+#' likelihood_d(string, n = 9)
+#' 
+#' likelihood_ratio(string, n = 9)
+#' 
+#' prob_random(string, n = 9, prior= 0.5)
+#' 
 #' @param string \code{character} vector containing the to be analyzed strings (can contain multiple strings).
 #' @param n \code{numeric}, the number of possible symbols (not necessarily actually appearing in str). Must be one of \code{c(2, 4, 5, 6, 9)} (can also be \code{NULL} or contain multiple values for \code{acss}). Default is 9.
-#' @param prior \code{numeric},  the prior probability that the underlying process is randomness.
+#' @param prior \code{numeric},  the prior probability that the underlying process is random.
 #' @param span size of substrings to be created from \code{string}.
 #' 
 #' @return
 #' \describe{
 #'   \item{"acss"}{A matrix in which the rows correspond to the strings entered and the columns to the algorithmic complexity K and the algorithmic probability D of the string (see \url{http://complexitycalculator.com/methodology.html}).}
-#'   \item{"prob_random"}{A named vector with the probabilities that each string was produced by a random process (and not a Turing Machine) given the provided prior for being produced by a random process (default is 0.5).}
 #'   \item{"local_complexity"}{A list with elements corresponding to the strings. Each list containes a named vector of algorithmic complexities (K) of all substrings in each string with length span.}
+#'   \item{"likelihood_d"}{A named vector with the likelihoods for \code{string} given a detreministic process.}
+#'   \item{"likelihood_ratio"}{A named vector with the likelihood ratios (or Bayes factors) for \code{string} given a random rather than detreministic process.}
+#'   \item{"prob_random"}{A named vector with the posterior probabilities that for a random process given the strings and the provided prior for being produced by a random process (default is 0.5, which correspond to a prior of 1 - 0.5 = 0.5 for a detereministic process).}
 #'   }
 #' 
 #' @details The algorithmic complexity is computed using the coding theorem method: For a given set of symbols in a string, all possible or a large number of random samples of Turing machines (TM) with a given number of states (e.g., 5) and number of symbols corresponding to the number of symbols in the strings were simulated until they reached a halting state or failed to end. This package accesses a database containing data on 4.5 million strings from length 1 to 12 simulated on TMs with 2, 4, 5, 6, and 9 symbols. The complexity of the string corresponds to the distribution of the halting states of the TMs.
@@ -35,8 +41,8 @@
 #' @example examples/examples.acss.R
 #' 
 #' @name acss
-#' @aliases acss prob_random local_complexity
-#' @export acss prob_random local_complexity
+#' @aliases acss prob_random local_complexity likelihood_d likelihood_ratio
+#' @export acss prob_random local_complexity likelihood_d likelihood_ratio
 #' @importFrom zoo rollapply
 #' @import acss.data
 #' 
@@ -66,7 +72,8 @@ acss <- function(string, n = 9) { #, return = "matrix") {
 }
 
 
-prob_random <- function(string, n = 9, prior= 0.5){
+likelihood_d <- function(string, n = 9) {
+  if (length(n) > 1) stop("'n' needs to be of length 1.")
   if (!(n %in% c(2, 4, 5, 6, 9))) stop("n must be in c(2, 4, 5, 6, 9)")
   check_string(string)
   l <- nchar(string)
@@ -79,16 +86,36 @@ prob_random <- function(string, n = 9, prior= 0.5){
     tmp$D <- 2^(-tmp[,paste0("K.", n)])
     tmp
   })
+  #browser()
   ptot <- vapply(subtables, function(x) sum(x$count*x$D), 0)
-  psgivenr <- (1/n^lu)[match(l, lu)]
   psgiventm <- acss(string, n = n)[,paste0("D.", n)]/ptot[match(l, lu)]
-  tmp <- psgivenr*prior/(psgivenr*prior+psgiventm*(1-prior))
-  names(tmp) <- string
-  tmp
+  names(psgiventm) <- string
+  psgiventm  
+}
+
+likelihood_ratio <- function(string, n = 9) {
+  llk_deterministic <- likelihood_d(string, n = n)
+  l <- nchar(string)
+  lu <- unique(l)
+  llk_random <- (1/n^lu)[match(l, lu)]
+  llk_random/llk_deterministic
+}
+
+# old version:
+prob_random <- function(string, n = 9, prior= 0.5){
+  l <- nchar(string)
+  lu <- unique(l)
+  psgivenr <- (1/n^lu)[match(l, lu)]
+  psgiventm <- likelihood_d(string, n = n)
+  psgivenr*prior/(psgivenr*prior+psgiventm*(1-prior))
+#   tmp <- psgivenr*prior/(psgivenr*prior+psgiventm*(1-prior))
+#   names(tmp) <- string
+#   tmp
 }
 
 local_complexity <- function(string, span = 5, n = 9) {
   check_string(string)
+  if (span < 2 | span > 12) stop("span needs to be between 2 and 12 (inclusive).")
   #browser()
   #l <- nchar(string)
   splitted <- strsplit(string,"")  

@@ -1,14 +1,20 @@
 \name{acss}
 \alias{acss}
+\alias{likelihood_d}
+\alias{likelihood_ratio}
 \alias{local_complexity}
 \alias{prob_random}
 \title{ACSS complexity}
 \usage{
-acss(string, n)
-
-prob_random(string, n = 9, prior= 0.5)
+acss(string, n = 9)
 
 local_complexity(string, span = 5, n = 9)
+
+likelihood_d(string, n = 9)
+
+likelihood_ratio(string, n = 9)
+
+prob_random(string, n = 9, prior= 0.5)
 }
 \arguments{
   \item{string}{\code{character} vector containing the to
@@ -20,7 +26,7 @@ local_complexity(string, span = 5, n = 9)
   contain multiple values for \code{acss}). Default is 9.}
 
   \item{prior}{\code{numeric}, the prior probability that
-  the underlying process is randomness.}
+  the underlying process is random.}
 
   \item{span}{size of substrings to be created from
   \code{string}.}
@@ -31,14 +37,19 @@ correspond to the strings entered and the columns to the
 algorithmic complexity K and the algorithmic probability D
 of the string (see
 \url{http://complexitycalculator.com/methodology.html}).}
-\item{"prob_random"}{A named vector with the probabilities
-that each string was produced by a random process (and not
-a Turing Machine) given the provided prior for being
-produced by a random process (default is 0.5).}
 \item{"local_complexity"}{A list with elements
 corresponding to the strings. Each list containes a named
 vector of algorithmic complexities (K) of all substrings in
-each string with length span.} }
+each string with length span.} \item{"likelihood_d"}{A
+named vector with the likelihoods for \code{string} given a
+detreministic process.} \item{"likelihood_ratio"}{A named
+vector with the likelihood ratios (or Bayes factors) for
+\code{string} given a random rather than detreministic
+process.} \item{"prob_random"}{A named vector with the
+posterior probabilities that for a random process given the
+strings and the provided prior for being produced by a
+random process (default is 0.5, which correspond to a prior
+of 1 - 0.5 = 0.5 for a detereministic process).} }
 }
 \description{
 Functions to conveniently compute algorithmic complexity
@@ -104,13 +115,17 @@ acss(c("HEHHEE", "GHHGGHGHUE", "HSHSHHSHSS"), NULL)
 ## HSHSHHSHSS 2.618613e-11
 
 \dontrun{
-prob_random(c("HEHHEE", "GHHGGHGHUE", "HSHSHHSHSS"))
-##     HEHHEE GHHGGHGHUE HSHSHHSHSS 
-## 0.31223451 0.09675417 0.01692974 
+likelihood_d(c("HTHTHTHT", "HTHHTHTT"), n = 2)
+##    HTHTHTHT    HTHHTHTT 
+## 0.010366951 0.003102718 
 
-prob_random(c("HEHHEE", "GHHGGHGHUE", "HSHSHHSHSS"), n = 5)
-##     HEHHEE GHHGGHGHUE HSHSHHSHSS 
-## 0.39406436 0.30998532 0.07441426 
+likelihood_ratio(c("HTHTHTHT", "HTHHTHTT"), n = 2)
+##  HTHTHTHT  HTHHTHTT 
+## 0.3767983 1.2589769 
+
+prob_random(c("HTHTHTHT", "HTHHTHTT"), n = 2)
+##  HTHTHTHT  HTHHTHTT 
+## 0.2736772 0.5573217
 }
 
 local_complexity(c("01011010111" ,"GHHGGHGHUE"), span=5, n = 5)

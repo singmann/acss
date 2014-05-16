@@ -1,9 +1,11 @@
 require(devtools)
 require(roxygen2)
-dev_mode()
 load_all()
+#dev_mode()
+
 
 options(error = recover)
 
 require(testthat)
 test_package("acss")
+help(package = "acss")

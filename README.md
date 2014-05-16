@@ -7,7 +7,10 @@ acss: measures of algorithmic complexity in R.
 
 ## Installation
 
-* From CRAN: In the future
+* From CRAN:
+```
+install.packages("acss")
+```
 
 * Development version from Github:
 ```
