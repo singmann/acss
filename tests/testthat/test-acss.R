@@ -7,10 +7,10 @@ test_that("acss returns what it should return", {
       ), .Dim = c(2L, 4L), .Dimnames = list(c("01011100", "00030101"
       ), c("K.2", "K.4", "D.2", "D.4")))
   
-  expect_equal(acss(c("01011100", "00030101"), n = c(2, 4)), res1)
+  expect_equal(acss(c("01011100", "00030101"), alphabet = c(2, 4)), res1)
   
   # taken from the AcssGuide.pdf
-  res2 <- acss("010120123", n = 5)[1,]
+  res2 <- acss("010120123", alphabet = 5)[1,]
   expect_equivalent(round(res2[1], 5), c(30.03474))
   expect_equivalent(res2[2], 9.091617e-10)
 })
@@ -32,11 +32,11 @@ test_that("acss structural aspects", {
 context("local_complexity")
 
 test_that("local_complexity structural", {
-  l1 <- local_complexity(c("01011010111"), span=5, n = 5)
+  l1 <- local_complexity(c("01011010111"), span=5, alphabet = 5)
   expect_that(l1, is_a("list"))
   expect_that(length(l1), is_identical_to(1L))
   expect_named(l1)
-  l2 <- local_complexity(c("01011010111" , "01011010111"), span=5, n = 5)
+  l2 <- local_complexity(c("01011010111" , "01011010111"), span=5, alphabet = 5)
   expect_that(l2, is_a("list"))
   expect_that(length(l2), is_identical_to(2L))
   expect_named(l2)
@@ -48,7 +48,7 @@ test_that("local_complexity structural", {
 })
 
 test_that("local_complexity: guide", {
-  expect_equal(round(mean(local_complexity("010120123", n = 5)[[1]]), 5),  16.81957)  
+  expect_equal(round(mean(local_complexity("010120123", alphabet = 5)[[1]]), 5),  16.81957)  
 })
 
 

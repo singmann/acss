@@ -6,7 +6,7 @@
 \usage{
 normalize_string(string)
 
-count_class(string, n)
+count_class(string, alphabet)
 
 alternations(string, proportion = FALSE)
 }
@@ -14,8 +14,8 @@ alternations(string, proportion = FALSE)
   \item{string}{\code{character} vector containing the to
   be analyzed strings (can contain multiple strings).}
 
-  \item{n}{\code{numeric}, the number of possible symbols
-  (not necessarily actually appearing in str).}
+  \item{alphabet}{\code{numeric}, the number of possible
+  symbols (not necessarily actually appearing in string).}
 
   \item{proportion}{\code{boolean}, indicating if the
   result from \code{alternation} should be given as a
@@ -27,22 +27,22 @@ alternations(string, proportion = FALSE)
 \describe{ \item{\code{normalize_string}}{A normalized
 vector of strings of the same length as \code{string}.}
 \item{\code{count_class}}{A vector of the same length as
-\code{string} with the number of possible equaivalent
+\code{string} with the number of possible equivalent
 strings when \code{string} is normalized and considering
-\code{n}.} \item{\code{alternations}}{A vector with the
-number (or proprtion) of alternations of the same length as
-\code{string}} }
+\code{alphabet}.} \item{\code{alternations}}{A vector with
+the number (or proprtion) of alternations of the same
+length as \code{string}} }
 }
 \description{
 \code{normalize_string} takes a character vector and
 normalizes its input using the symbols 0, 1, 2...9.
 \code{count_class} takes a character vector and an integer
-\code{n} (with the restriction that the number of different
-symbols in the character vector doesn't exceed \code{n})
-and returns the total number of strings that are equivalent
-to the input when normalized and considering \code{n}.
-\code{alternations} returns the number of alternations of
-symbols in a string.
+\code{alphabet} (with the restriction that the number of
+different symbols in the character vector doesn't exceed
+\code{alphabet}) and returns the total number of strings
+that are equivalent to the input when normalized and
+considering \code{alphabet}. \code{alternations} returns
+the number of alternations of symbols in a string.
 }
 \details{
 nothing yet.

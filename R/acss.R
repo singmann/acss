@@ -2,18 +2,18 @@
 #' 
 #' Functions to conveniently compute algorithmic complexity for short string, an approximation of the Kolmogorov Complexity of a short string using the coding theorem method.
 #' 
-#' @usage acss(string, n = 9)
+#' @usage acss(string, alphabet = 9)
 #' 
-#' local_complexity(string, span = 5, n = 9)
+#' local_complexity(string, span = 5, alphabet = 9)
 #' 
-#' likelihood_d(string, n = 9)
+#' likelihood_d(string, alphabet = 9)
 #' 
-#' likelihood_ratio(string, n = 9)
+#' likelihood_ratio(string, alphabet = 9)
 #' 
-#' prob_random(string, n = 9, prior= 0.5)
+#' prob_random(string, alphabet = 9, prior= 0.5)
 #' 
 #' @param string \code{character} vector containing the to be analyzed strings (can contain multiple strings).
-#' @param n \code{numeric}, the number of possible symbols (not necessarily actually appearing in str). Must be one of \code{c(2, 4, 5, 6, 9)} (can also be \code{NULL} or contain multiple values for \code{acss}). Default is 9.
+#' @param alphabet \code{numeric}, the number of possible symbols (not necessarily actually appearing in str). Must be one of \code{c(2, 4, 5, 6, 9)} (can also be \code{NULL} or contain multiple values for \code{acss}). Default is 9.
 #' @param prior \code{numeric},  the prior probability that the underlying process is random.
 #' @param span size of substrings to be created from \code{string}.
 #' 
@@ -48,15 +48,15 @@
 #' 
 
 
-acss <- function(string, n = 9) { #, return = "matrix") {
+acss <- function(string, alphabet = 9) { #, return = "matrix") {
   check_string(string)
 #  return <- match.arg(return, c("matrix", "data.frame"))
   names <- string
   string <- normalize_string(string)
-  if (is.null(n)) tmp <- acss_data[string,]  
+  if (is.null(alphabet)) tmp <- acss_data[string,]  
   else {
-    if (any(!(n %in% c(2, 4, 5, 6, 9)))) stop("n must be in c(2, 4, 5, 6, 9)")
-    tmp <- acss_data[string, paste("K", n , sep = "."), drop = FALSE]
+    if (any(!(alphabet %in% c(2, 4, 5, 6, 9)))) stop("alphabet must be in c(2, 4, 5, 6, 9)")
+    tmp <- acss_data[string, paste("K", alphabet , sep = "."), drop = FALSE]
   }
   D <- apply(tmp, c(1,2), function(x) 2^(-x))
   colnames(D) <- paste0("D.", substr(colnames(D), 3, 3))  
@@ -72,57 +72,57 @@ acss <- function(string, n = 9) { #, return = "matrix") {
 }
 
 
-likelihood_d <- function(string, n = 9) {
-  if (length(n) > 1) stop("'n' needs to be of length 1.")
-  if (!(n %in% c(2, 4, 5, 6, 9))) stop("n must be in c(2, 4, 5, 6, 9)")
+likelihood_d <- function(string, alphabet = 9) {
+  if (length(alphabet) > 1) stop("'alphabet' needs to be of length 1.")
+  if (!(alphabet %in% c(2, 4, 5, 6, 9))) stop("alphabet must be in c(2, 4, 5, 6, 9)")
   check_string(string)
   l <- nchar(string)
   lu <- unique(l)
   rn <- nchar(rownames(acss_data))
   subtables <- lapply(lu, function(x) {
-    tmp <- acss_data[rn == x, paste0("K.", n), drop = FALSE]
-    tmp <- tmp[!is.na(tmp[,paste0("K.", n)]),,drop = FALSE]
-    tmp$count <- count_class(rownames(tmp), n = n)
-    tmp$D <- 2^(-tmp[,paste0("K.", n)])
+    tmp <- acss_data[rn == x, paste0("K.", alphabet), drop = FALSE]
+    tmp <- tmp[!is.na(tmp[,paste0("K.", alphabet)]),,drop = FALSE]
+    tmp$count <- count_class(rownames(tmp), alphabet = alphabet)
+    tmp$D <- 2^(-tmp[,paste0("K.", alphabet)])
     tmp
   })
   #browser()
   ptot <- vapply(subtables, function(x) sum(x$count*x$D), 0)
-  psgiventm <- acss(string, n = n)[,paste0("D.", n)]/ptot[match(l, lu)]
+  psgiventm <- acss(string, alphabet = alphabet)[,paste0("D.", alphabet)]/ptot[match(l, lu)]
   names(psgiventm) <- string
   psgiventm  
 }
 
-likelihood_ratio <- function(string, n = 9) {
-  llk_deterministic <- likelihood_d(string, n = n)
+likelihood_ratio <- function(string, alphabet = 9) {
+  llk_deterministic <- likelihood_d(string, alphabet = alphabet)
   l <- nchar(string)
   lu <- unique(l)
-  llk_random <- (1/n^lu)[match(l, lu)]
+  llk_random <- (1/alphabet^lu)[match(l, lu)]
   llk_random/llk_deterministic
 }
 
 # old version:
-prob_random <- function(string, n = 9, prior= 0.5){
+prob_random <- function(string, alphabet = 9, prior= 0.5){
   l <- nchar(string)
   lu <- unique(l)
-  psgivenr <- (1/n^lu)[match(l, lu)]
-  psgiventm <- likelihood_d(string, n = n)
+  psgivenr <- (1/alphabet^lu)[match(l, lu)]
+  psgiventm <- likelihood_d(string, alphabet = alphabet)
   psgivenr*prior/(psgivenr*prior+psgiventm*(1-prior))
 #   tmp <- psgivenr*prior/(psgivenr*prior+psgiventm*(1-prior))
 #   names(tmp) <- string
 #   tmp
 }
 
-local_complexity <- function(string, span = 5, n = 9) {
+local_complexity <- function(string, span = 5, alphabet = 9) {
   check_string(string)
-  if (length(n) > 1) stop("'n' needs to be of length 1.")
-  if (!(n %in% c(2, 4, 5, 6, 9))) stop("n must be in c(2, 4, 5, 6, 9)")
+  if (length(alphabet) > 1) stop("'alphabet' needs to be of length 1.")
+  if (!(alphabet %in% c(2, 4, 5, 6, 9))) stop("alphabet must be in c(2, 4, 5, 6, 9)")
   if (span < 2 | span > 12) stop("span needs to be between 2 and 12 (inclusive).")
   #browser()
   #l <- nchar(string)
   splitted <- strsplit(string,"")  
   new.string <- lapply(splitted, function(x) rollapply(x, width = span, FUN = paste0, collapse = ""))  
-  tmp <- lapply(new.string, function(x) acss(x, n = n)[,paste0("K.", n)])
+  tmp <- lapply(new.string, function(x) acss(x, alphabet = alphabet)[,paste0("K.", alphabet)])
   tmp <- mapply(function(x,y) {
     names(x) <- y
     return(x)}, tmp, new.string, SIMPLIFY = FALSE)

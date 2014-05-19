@@ -6,24 +6,25 @@
 \alias{prob_random}
 \title{ACSS complexity}
 \usage{
-acss(string, n = 9)
+acss(string, alphabet = 9)
 
-local_complexity(string, span = 5, n = 9)
+local_complexity(string, span = 5, alphabet = 9)
 
-likelihood_d(string, n = 9)
+likelihood_d(string, alphabet = 9)
 
-likelihood_ratio(string, n = 9)
+likelihood_ratio(string, alphabet = 9)
 
-prob_random(string, n = 9, prior= 0.5)
+prob_random(string, alphabet = 9, prior= 0.5)
 }
 \arguments{
   \item{string}{\code{character} vector containing the to
   be analyzed strings (can contain multiple strings).}
 
-  \item{n}{\code{numeric}, the number of possible symbols
-  (not necessarily actually appearing in str). Must be one
-  of \code{c(2, 4, 5, 6, 9)} (can also be \code{NULL} or
-  contain multiple values for \code{acss}). Default is 9.}
+  \item{alphabet}{\code{numeric}, the number of possible
+  symbols (not necessarily actually appearing in str). Must
+  be one of \code{c(2, 4, 5, 6, 9)} (can also be
+  \code{NULL} or contain multiple values for \code{acss}).
+  Default is 9.}
 
   \item{prior}{\code{numeric}, the prior probability that
   the underlying process is random.}
