@@ -1,0 +1,45 @@
+\docType{data}
+\name{exp1}
+\alias{exp1}
+\title{Data from Experiment 1 in Gauvrit, Singmann, Soler-Toscano & Zenil}
+\format{A data.frame with 34 rows and 2 variables.}
+\source{
+Gauvrit, Singmann, Soler-Toscano & Zenil (submitted).
+Complexity for psychology. A user-friendly implementation
+of the coding theorem method.
+}
+\usage{
+exp1
+}
+\description{
+34 participants were asked to produce at their own pace a
+series of 10 symbols among "A", "B", "C", and "D" that
+would "look as random as possible, so that if someone else
+sees the sequence, she will believe it is a truly random
+one".
+}
+\examples{
+
+# load data
+data(exp1)
+
+# summary statistics
+nrow(exp1)
+summary(exp1$age)
+mean(exp1$age)
+sd(exp1$age)
+
+\dontrun{
+# this uses code from likelihood_d() to calculate the mean complexity K
+# for all strings of length 10 with alphabet = 4:
+tmp <- acss_data[nchar(rownames(acss_data)) == 10, "K.4", drop = FALSE]
+tmp <- tmp[!is.na(tmp[,"K.4"]),,drop = FALSE]
+tmp$count <- count_class(rownames(tmp), alphabet = 4)
+(mean_K <- with(tmp, sum(K.4*count)/sum(count)))
+
+t.test(acss(exp1$string, 4)[,"K.4"], mu = mean_K)
+}
+
+}
+\keyword{dataset}
+

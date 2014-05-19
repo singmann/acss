@@ -1,8 +1,8 @@
 Package: acss
 Type: Package
 Title: Algorithmic Complexity for Short Strings
-Version: 0.2-1
-Date: 2014-05-16
+Version: 0.2-2
+Date: 2014-05-19
 Authors@R: c( person("Nicolas", "Gauvrit", role = "aut"),
     person("Fernando", "Soler Toscano", role = "aut"),
     person("Hector", "Zenil", role = "aut"),
@@ -14,13 +14,15 @@ Imports:
 Depends:
     R (>= 2.15.0),
     acss.data
+Suggests:
+    effects
 Description: Main functionality is to provide the algorithmic complexity for
     short strings, an approximation of the Kolmogorov Complexity of a short
     string using the coding theorem method (see ?acss). The database containing
     the complexity is provided in the data only package acss.data, this package
     provides functions accessing the data such as prob_random returning the
-    probability that a given string was produced by a random process. In
-    addition, two traditional (but problematic) measures of complexity are also
-    provided: entropy and change complexity.
+    posterior probability that a given string was produced by a random process.
+    In addition, two traditional (but problematic) measures of complexity are
+    also provided: entropy and change complexity.
 URL: http://complexitycalculator.com/methodology.html
 License: GPL (>= 2)

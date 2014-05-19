@@ -95,7 +95,7 @@ acss(c("HEHHEE", "GHHGGHGHH", "HSHSHHSHSS"))
 acss(c("HEHHEE", "GHHGGHGHH", "HSHSHHSHSS"))[,"K.9"]
 ## [1] 23.38852 33.50168 35.15241
 
-acss(c("HEHHEE", "GHHGGHGHH", "HSHSHHSHSS"), n = 2)
+acss(c("HEHHEE", "GHHGGHGHH", "HSHSHHSHSS"), alphabet = 2)
 ##                 K.2          D.2
 ## HEHHEE     14.96921 3.117581e-05
 ## GHHGGHGHH  25.60208 1.963387e-08
@@ -116,20 +116,20 @@ acss(c("HEHHEE", "GHHGGHGHUE", "HSHSHHSHSS"), NULL)
 ## HSHSHHSHSS 2.618613e-11
 
 \dontrun{
-likelihood_d(c("HTHTHTHT", "HTHHTHTT"), n = 2)
+likelihood_d(c("HTHTHTHT", "HTHHTHTT"), alphabet = 2)
 ##    HTHTHTHT    HTHHTHTT 
 ## 0.010366951 0.003102718 
 
-likelihood_ratio(c("HTHTHTHT", "HTHHTHTT"), n = 2)
+likelihood_ratio(c("HTHTHTHT", "HTHHTHTT"), alphabet = 2)
 ##  HTHTHTHT  HTHHTHTT 
 ## 0.3767983 1.2589769 
 
-prob_random(c("HTHTHTHT", "HTHHTHTT"), n = 2)
+prob_random(c("HTHTHTHT", "HTHHTHTT"), alphabet = 2)
 ##  HTHTHTHT  HTHHTHTT 
 ## 0.2736772 0.5573217
 }
 
-local_complexity(c("01011010111" ,"GHHGGHGHUE"), span=5, n = 5)
+local_complexity(c("01011010111" ,"GHHGGHGHUE"), span=5, alphabet = 5)
 ## $`01011010111`
 ##    01011    10110    01101    11010    10101    01011    10111 
 ## 16.22469 16.24766 16.24766 16.22469 16.24322 16.22469 15.93927 

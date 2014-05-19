@@ -1,0 +1,44 @@
+\docType{data}
+\name{exp2}
+\alias{exp2}
+\title{Data from Experiment 2 in Gauvrit, Singmann, Soler-Toscano & Zenil}
+\format{A data.frame with 200 rows and 2 variables.}
+\source{
+Gauvrit, Singmann, Soler-Toscano & Zenil (submitted).
+Complexity for psychology. A user-friendly implementation
+of the coding theorem method.
+}
+\usage{
+exp2
+}
+\description{
+Responses of one participant (42 years old) to 200 randomly
+generated strings of length 10 from an alphabet of 6
+symbols. For each string, the participant was asked to
+indicate whther or not the string appears random or not.
+}
+\examples{
+
+# load data
+data(exp2)
+
+exp2$K <- acss(exp2$string, 6)[,"K.6"]
+
+m_log <- glm(response ~ K, exp2, family = binomial)
+summary(m_log)
+
+# odds ratio of K:
+exp(coef(m_log)[2])
+
+# calculate threshold of 0.5
+(threshold <- -coef(m_log)[1]/coef(m_log)[2])
+
+require(effects)
+plot(Effect("K", m_log), rescale.axis = FALSE, ylim = c(0, 1))
+trellis.focus("panel", 1, 1)
+panel.lines(rep(threshold, 2), c(0, 0.5), col = "black", lwd = 2.5, lty = 3)
+panel.lines(c(33,threshold), c(0.5, 0.5), col = "black", lwd = 2.5, lty = 3)
+trellis.unfocus()
+}
+\keyword{dataset}
+
