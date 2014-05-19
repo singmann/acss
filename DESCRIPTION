@@ -1,7 +1,7 @@
 Package: acss
 Type: Package
 Title: Algorithmic Complexity for Short Strings
-Version: 0.2-2
+Version: 0.2-3
 Date: 2014-05-19
 Authors@R: c( person("Nicolas", "Gauvrit", role = "aut"),
     person("Fernando", "Soler Toscano", role = "aut"),
