@@ -3,12 +3,10 @@ Type: Package
 Title: Algorithmic Complexity for Short Strings
 Version: 0.2-4
 Date: 2014-05-26
-Authors@R: c( 
-    person("Nicolas", "Gauvrit", role = "aut"),
-    person("Henrik", "Singmann", email = "singmann@gmail.com", role = c("aut", "cre")),
-    person("Fernando", "Soler Toscano", role = "ctb"),
-    person("Hector", "Zenil", role = "ctb")
-    )
+Authors@R: c( person("Nicolas", "Gauvrit", role = "aut"), person("Henrik",
+    "Singmann", email = "singmann@gmail.com", role = c("aut", "cre")),
+    person("Fernando", "Soler Toscano", role = "ctb"), person("Hector",
+    "Zenil", role = "ctb") )
 Imports:
     zoo
 Depends:

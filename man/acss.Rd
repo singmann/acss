@@ -8,7 +8,7 @@
 \usage{
 acss(string, alphabet = 9)
 
-local_complexity(string, span = 5, alphabet = 9)
+local_complexity(string, alphabet = 9, span = 5)
 
 likelihood_d(string, alphabet = 9)
 
@@ -23,8 +23,8 @@ prob_random(string, alphabet = 9, prior= 0.5)
   \item{alphabet}{\code{numeric}, the number of possible
   symbols (not necessarily actually appearing in str). Must
   be one of \code{c(2, 4, 5, 6, 9)} (can also be
-  \code{NULL} or contain multiple values for \code{acss}).
-  Default is 9.}
+  \code{NULL} or contain multiple values for
+  \code{acss()}). Default is 9.}
 
   \item{prior}{\code{numeric}, the prior probability that
   the underlying process is random.}
@@ -129,7 +129,7 @@ prob_random(c("HTHTHTHT", "HTHHTHTT"), alphabet = 2)
 ## 0.2736772 0.5573217
 }
 
-local_complexity(c("01011010111" ,"GHHGGHGHUE"), span=5, alphabet = 5)
+local_complexity(c("01011010111" ,"GHHGGHGHUE"), alphabet = 5, span=5)
 ## $`01011010111`
 ##    01011    10110    01101    11010    10101    01011    10111 
 ## 16.22469 16.24766 16.24766 16.22469 16.24322 16.22469 15.93927 

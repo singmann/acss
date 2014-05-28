@@ -26,7 +26,7 @@ spans <- 3:11
 # note, the next loop takes more than 5 minutes.
 for (i in spans) {
   matthews2013[,paste0("K2_span", i)] <- 
-    sapply(local_complexity(matthews2013$string, span = i, alphabet=2), mean)
+    sapply(local_complexity(matthews2013$string, alphabet=2, span = i), mean)
 }
 
 lm_list <- vector("list", 8)

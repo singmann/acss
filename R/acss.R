@@ -4,7 +4,7 @@
 #' 
 #' @usage acss(string, alphabet = 9)
 #' 
-#' local_complexity(string, span = 5, alphabet = 9)
+#' local_complexity(string, alphabet = 9, span = 5)
 #' 
 #' likelihood_d(string, alphabet = 9)
 #' 
@@ -13,7 +13,7 @@
 #' prob_random(string, alphabet = 9, prior= 0.5)
 #' 
 #' @param string \code{character} vector containing the to be analyzed strings (can contain multiple strings).
-#' @param alphabet \code{numeric}, the number of possible symbols (not necessarily actually appearing in str). Must be one of \code{c(2, 4, 5, 6, 9)} (can also be \code{NULL} or contain multiple values for \code{acss}). Default is 9.
+#' @param alphabet \code{numeric}, the number of possible symbols (not necessarily actually appearing in str). Must be one of \code{c(2, 4, 5, 6, 9)} (can also be \code{NULL} or contain multiple values for \code{acss()}). Default is 9.
 #' @param prior \code{numeric},  the prior probability that the underlying process is random.
 #' @param span size of substrings to be created from \code{string}.
 #' 
@@ -113,7 +113,7 @@ prob_random <- function(string, alphabet = 9, prior= 0.5){
 #   tmp
 }
 
-local_complexity <- function(string, span = 5, alphabet = 9) {
+local_complexity <- function(string, alphabet = 9, span = 5) {
   check_string(string)
   if (length(alphabet) > 1) stop("'alphabet' needs to be of length 1.")
   if (!(alphabet %in% c(2, 4, 5, 6, 9))) stop("alphabet must be in c(2, 4, 5, 6, 9)")

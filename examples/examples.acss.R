@@ -46,7 +46,7 @@ prob_random(c("HTHTHTHT", "HTHHTHTT"), alphabet = 2)
 ## 0.2736772 0.5573217
 }
 
-local_complexity(c("01011010111" ,"GHHGGHGHUE"), span=5, alphabet = 5)
+local_complexity(c("01011010111" ,"GHHGGHGHUE"), alphabet = 5, span=5)
 ## $`01011010111`
 ##    01011    10110    01101    11010    10101    01011    10111 
 ## 16.22469 16.24766 16.24766 16.22469 16.24322 16.22469 15.93927 
