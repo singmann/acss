@@ -63,6 +63,7 @@ acss <- function(string, alphabet = 9) { #, return = "matrix") {
   string <- normalize_string(string)
   if (is.null(alphabet)) tmp <- acss_data[string,]  
   else {
+    alphabet <- as.numeric(alphabet)
     if (any(!(alphabet %in% c(2, 4, 5, 6, 9)))) stop("alphabet must be in c(2, 4, 5, 6, 9)")
     tmp <- acss_data[string, paste("K", alphabet , sep = "."), drop = FALSE]
   }
@@ -82,6 +83,7 @@ acss <- function(string, alphabet = 9) { #, return = "matrix") {
 
 likelihood_d <- function(string, alphabet = 9) {
   if (length(alphabet) > 1) stop("'alphabet' needs to be of length 1.")
+  alphabet <- as.numeric(alphabet)
   if (!(alphabet %in% c(2, 4, 5, 6, 9))) stop("alphabet must be in c(2, 4, 5, 6, 9)")
   check_string(string)
   l <- nchar(string)
@@ -124,6 +126,7 @@ prob_random <- function(string, alphabet = 9, prior= 0.5){
 local_complexity <- function(string, alphabet = 9, span = 5) {
   check_string(string)
   if (length(alphabet) > 1) stop("'alphabet' needs to be of length 1.")
+  alphabet <- as.numeric(alphabet)
   if (!(alphabet %in% c(2, 4, 5, 6, 9))) stop("alphabet must be in c(2, 4, 5, 6, 9)")
   if (span < 2 | span > 12) stop("span needs to be between 2 and 12 (inclusive).")
   #browser()
