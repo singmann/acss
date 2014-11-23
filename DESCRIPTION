@@ -4,7 +4,7 @@ Title: Algorithmic Complexity for Short Strings
 Version: 0.2-5
 Date: 2014-11-23
 Authors@R: c( person("Nicolas", "Gauvrit", role = "aut"), person("Henrik",
-    "Singmann", email = "singmann@gmail.com", role = c("aut", "cre")),
+    "Singmann", email = "singmann+acss@gmail.com", role = c("aut", "cre")),
     person("Fernando", "Soler Toscano", role = "ctb"), person("Hector",
     "Zenil", role = "ctb") )
 Imports:
