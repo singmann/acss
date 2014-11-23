@@ -42,7 +42,7 @@
 #' 
 #' Levin, L. A. (1974). Laws of information conservation (nongrowth) and aspects of the foundation of probability theory. \emph{Problemy Peredachi Informatsii}, 10(3), 30-35.
 #' 
-#' Soler-Toscano, F., Zenil, H., Delahaye, J.-P., & Gauvrit, N. (2012). \emph{Calculating Kolmogorov Complexity from the Output Frequency Distributions of Small Turing Machines}. arXiv:1211.1302 [cs.it].
+#' Soler-Toscano, F., Zenil, H., Delahaye, J.-P., & Gauvrit, N. (2012). Calculating Kolmogorov Complexity from the Output Frequency Distributions of Small Turing Machines. \emph{PLoS ONE}, 9(5): e96223.
 #' 
 #' @note The first time per session one of the functions described here is used, a relatively large dataset is loaded into memory which can take a considerable amount of time (> 10 seconds).
 #' 
