@@ -1,6 +1,6 @@
 #' ACSS complexity
 #' 
-#' Functions to conveniently compute algorithmic complexity for short string, an approximation of the Kolmogorov Complexity of a short string using the coding theorem method.
+#' Functions to obtain the algorithmic complexity for short strings, an approximation of the Kolmogorov Complexity of a short string using the coding theorem method.
 #' 
 #' @usage acss(string, alphabet = 9)
 #' 
@@ -26,13 +26,21 @@
 #'   \item{"prob_random"}{A named vector with the posterior probabilities that for a random process given the strings and the provided prior for being produced by a random process (default is 0.5, which correspond to a prior of 1 - 0.5 = 0.5 for a detereministic process).}
 #'   }
 #' 
-#' @details The algorithmic complexity is computed using the coding theorem method: For a given set of symbols in a string, all possible or a large number of random samples of Turing machines (TM) with a given number of states (e.g., 5) and number of symbols corresponding to the number of symbols in the strings were simulated until they reached a halting state or failed to end. This package accesses a database containing data on 4.5 million strings from length 1 to 12 simulated on TMs with 2, 4, 5, 6, and 9 symbols. The complexity of the string corresponds to the distribution of the halting states of the TMs.
+#' @details The algorithmic complexity is computed using the coding theorem method: For a given alphabet size (number of different symbols in a string), all possible or a large number of random samples of Turing machines (TM) with a given number of states (e.g., 5) and number of symbols corresponding to the alphabet size were simulated until they reached a halting state or failed to end.
+#' The outputs of the TMs at the halting states produces a distribution of strings known as the algorithmic probability of the strings. The algorithmic coding theorem (Levin, 1974) establishes the connection between the complexity of a string \eqn{K(s)} and its algorithmic probability \eqn{D(s)} as:
+#' \deqn{K(s)\approx -\log_{2}(D(s))}{K(s) = log(D(s))}
 #' 
-#' See \url{http://complexitycalculator.com/methodology.html} for more information or references below.
+#' This package accesses a database containing data on 4.5 million strings from length 1 to 12 simulated on TMs with 2, 4, 5, 6, and 9 symbols. 
+#' 
+#' For a more detailed discussion see Gauvrit, Singmann, Soler-Toscano, and Zenil (2014), \url{http://complexitycalculator.com/methodology.html}, or references below.
 #' 
 #' @references Delahaye, J.-P., & Zenil, H. (2012). Numerical evaluation of algorithmic complexity for short strings: A glance into the innermost structure of randomness. \emph{Applied Mathematics and Computation}, 219(1), 63-77. doi:10.1016/j.amc.2011.10.006 
 #' 
-#' Gauvrit, N., Zenil, H., Delahaye, J.-P., & Soler-Toscano, F. (2014). Algorithmic complexity for short binary strings applied to psychology: a primer. \emph{Behavior Research Methods}. doi:10.3758/s13428-013-0416-0
+#' Gauvrit, N., Singmann, H., Soler-Toscano, F., & Zenil, H. (2014). Algorithmic complexity for psychology: A user-friendly implementation of the coding theorem method. arXiv:1409.4080 [cs, stat]. \url{http://arxiv.org/abs/1409.4080}.
+#' 
+#' Gauvrit, N., Zenil, H., Delahaye, J.-P., & Soler-Toscano, F. (2014). Algorithmic complexity for short binary strings applied to psychology: a primer. \emph{Behavior Research Methods}, 46(3), 732-744. doi:10.3758/s13428-013-0416-0
+#' 
+#' Levin, L. A. (1974). Laws of information conservation (nongrowth) and aspects of the foundation of probability theory. \emph{Problemy Peredachi Informatsii}, 10(3), 30-35.
 #' 
 #' Soler-Toscano, F., Zenil, H., Delahaye, J.-P., & Gauvrit, N. (2012). \emph{Calculating Kolmogorov Complexity from the Output Frequency Distributions of Small Turing Machines}. arXiv:1211.1302 [cs.it].
 #' 

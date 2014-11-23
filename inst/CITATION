@@ -1,0 +1,20 @@
+citHeader("To cite acss in publications use:")
+
+citEntry(entry = "Article",
+  title        = "Algorithmic complexity for psychology: {A} user-friendly implementation
+               of the coding theorem method",
+  author       = personList(
+                    as.person("Nicolas Gauvrit"),
+                    as.person("Henrik Singmann"),
+                    as.person("Fernando Soler-Toscano"),
+                    as.person("Hector Zenil")
+                    ),
+  journal      = "arXiv",
+  year         = "2014",
+  volume       = "abs/1409.4080",
+  url          = "http://arxiv.org/abs/1409.4080",
+
+  textVersion  =
+  paste("Gauvrit, N., Singmann, H., Soler-Toscano, F., & Zenil, H. (2014). Algorithmic complexity for psychology. A user-friendly implementation of the coding theorem method. arXiv:1409.4080")
+)
+
