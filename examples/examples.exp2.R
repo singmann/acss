@@ -14,6 +14,7 @@ exp(coef(m_log)[2])
 (threshold <- -coef(m_log)[1]/coef(m_log)[2])
 
 require(effects)
+require(lattice)
 plot(Effect("K", m_log), rescale.axis = FALSE, ylim = c(0, 1))
 trellis.focus("panel", 1, 1)
 panel.lines(rep(threshold, 2), c(0, 0.5), col = "black", lwd = 2.5, lty = 3)
