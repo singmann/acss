@@ -1,0 +1,3 @@
+Version 0.2-5 (November 2014)
+
+ o added lattice to Suggests as it is not anymore loaded with effects (needed for example of Experiment 2).
