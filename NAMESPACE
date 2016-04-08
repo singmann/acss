@@ -2,6 +2,7 @@
 
 export(acss)
 export(alternations)
+export(bdm)
 export(change_complexity)
 export(count_class)
 export(entropy)

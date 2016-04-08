@@ -1,0 +1,17 @@
+
+acss("SSOOXFXFOXXOXOXFFXXXSOTTO")  # too long
+
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTO") # default span is 4
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 3)
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 6)
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 11)
+
+multi <- c(
+  "SSOOXFXFOXXOXOXFFXXXSOTTO",
+  "SSODXFXDOXXOXOXFFXRRSORTO",
+  "DXXXXRRXXXSSOOOXOFFFOOOOO"
+)
+
+bdm(multi)
+bdm(multi, delta = 4, span = 5) 
+bdm(multi, delta = 3)
