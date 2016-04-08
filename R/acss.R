@@ -69,16 +69,16 @@ acss <- function(string, alphabet = 9) { #, return = "matrix") {
   }
   D <- apply(tmp, c(1,2), function(x) 2^(-x))
   colnames(D) <- paste0("D.", substr(colnames(D), 3, 3))  
-#  if (return == "matrix") {
-    tmp <- as.matrix(cbind(tmp, D))  
-    rownames(tmp) <- names
-    if (any(is.na(tmp))) warning("Some acss not available. Either increase alphabet or use bdm().", call. = FALSE)
-    return(tmp)
-#   } else if (return == "data.frame") {
-#     tmp <- cbind(tmp, D)
-#     rownames(tmp) <- make.unique(names)
-#     return(tmp)
-#   }
+  #  if (return == "matrix") {
+  tmp <- as.matrix(cbind(tmp, D))  
+  rownames(tmp) <- names
+  if (any(is.na(tmp))) warning("Some acss not available. Either increase alphabet or use bdm().", call. = FALSE)
+  return(tmp)
+  #   } else if (return == "data.frame") {
+  #     tmp <- cbind(tmp, D)
+  #     rownames(tmp) <- make.unique(names)
+  #     return(tmp)
+  #   }
 }
 
 
