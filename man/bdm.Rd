@@ -35,6 +35,7 @@ multi <- c(
 
 bdm(multi)
 bdm(multi, delta = 4, span = 5) 
-bdm(multi, delta = 3)
+bdm(multi, span = 6)
+
 }
 
