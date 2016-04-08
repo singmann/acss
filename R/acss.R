@@ -72,6 +72,7 @@ acss <- function(string, alphabet = 9) { #, return = "matrix") {
 #  if (return == "matrix") {
     tmp <- as.matrix(cbind(tmp, D))  
     rownames(tmp) <- names
+    if (any(is.na(tmp))) warning("Some acss not available. Either increase alphabet or use bdm().", call. = FALSE)
     return(tmp)
 #   } else if (return == "data.frame") {
 #     tmp <- cbind(tmp, D)
