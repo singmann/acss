@@ -9,12 +9,14 @@ citEntry(entry = "Article",
                     as.person("Fernando Soler-Toscano"),
                     as.person("Hector Zenil")
                     ),
-  journal      = "arXiv",
-  year         = "2014",
-  volume       = "abs/1409.4080",
-  url          = "http://arxiv.org/abs/1409.4080",
+  journal      = "Behavior Research Methods",
+  year         = "2016",
+  volume       = "48",
+  issue        = "1",
+  pages        = "314-329",
+  doi          = "10.3758/s13428-015-0574-3",
 
   textVersion  =
-  paste("Gauvrit, N., Singmann, H., Soler-Toscano, F., & Zenil, H. (2014). Algorithmic complexity for psychology. A user-friendly implementation of the coding theorem method. arXiv:1409.4080")
+  paste("Gauvrit, N., Singmann, H., Soler-Toscano, F., & Zenil, H. (2016). Algorithmic complexity for psychology: a user-friendly implementation of the coding theorem method. Behavior Research Methods, 48(1), 314-329. http://doi.org/10.3758/s13428-015-0574-3")
 )
 

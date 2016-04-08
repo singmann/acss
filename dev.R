@@ -2,7 +2,7 @@ require(devtools)
 require(roxygen2)
 load_all()
 #dev_mode()
-
+roxygenise()
 
 options(error = recover)
 
