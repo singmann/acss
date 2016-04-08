@@ -1,0 +1,478 @@
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Algorithmic complexity for psychology: A user-friendly implementation of the coding theorem method.}
+%\VignetteDepends{acss}
+%\VignetteKeywords{acss}
+%\VignettePackage{acss}
+
+\documentclass{article}
+\usepackage[round]{natbib}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+
+
+% see: https://stat.ethz.ch/pipermail/r-help/2007-November/144810.html
+\newcommand{\pkg}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+\let\proglang=\textsf
+\let\code=\texttt
+\newcommand{\CRANpkg}[1]{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
+\newcommand{\acss}{\CRANpkg{acss}\xspace}	
+
+	
+\begin{document}
+
+\title{Algorithmic complexity for psychology: A user-friendly implementation of the coding theorem method.\thanks{This manuscript was originally published as: \newline Gauvrit, N., Singmann, H., Soler-Toscano, F., \& Zenil, H. (2016). Algorithmic complexity for psychology: a user-friendly implementation of the coding theorem method. \emph{Behavior Research Methods}, 48(1), 314-329. \url{http://doi.org/10.3758/s13428-015-0574-3} \newline }}
+	
+	
+	\author{Nicolas Gauvrit \\ CHArt (PARIS-reasoning), Ecole Pratique des Hautes Etudes, Paris, France \\ \\ Henrik Singmann\\ University of Zurich, Switzerland  \\ \\ Fernando Soler-Toscano \\ Grupo de L\'ogica, Lenguaje e Informaci\'on, Universidad de Sevilla, Spain \\ \\ Hector Zenil \\ Unit of Computational Medicine, Center for Molecular Medicine, \\ Karolinska Institute, Stockholm, Sweden}
+	
+	
+	\maketitle
+	
+	
+\begin{abstract}
+Kolmogorov-Chaitin complexity has long been believed to be impossible to approximate when it comes to short sequences (e.g. of length 5-50). However, with the newly developed \emph{coding theorem method} the complexity of strings of length 2-11 can now be numerically estimated. We present the theoretical basis of algorithmic complexity for short strings (ACSS) and describe an R-package providing functions based on ACSS that will cover psychologists' needs and improve upon previous methods in three ways: (1) ACSS is now available not only for binary strings, but for strings based on up to 9 different symbols, (2) ACSS no longer requires time-consuming computing, and (3) a new approach based on ACSS gives access to an estimation of the complexity of strings of any length. Finally, three illustrative examples show how these tools can be applied to psychology.
+
+Keywords: algorithmic complexity, randomness, subjective probability, coding theorem method
+
+\end{abstract}
+
+\section{Introduction}
+Randomness and complexity are two concepts which are intimately related and are both central to numerous recent developments in various fields, including finance \citep{taufemback2011,brandouy2012}, linguistics \citep{gruber2010,naranan2011}, neuropsychology \citep{machado2010,fernandez2011,fernandez2012}, psychiatry \citep{yang2012,takahashi2012}, genetics \citep{yagil2009,ryabko2013}, sociology \citep{elzinga2010} and the behavioral sciences \citep{watanabe2003,scafetta2009}. In psychology, randomness and complexity have recently attracted interest, following the realization that they could shed light on a diversity of previously undeciphered behaviors and mental processes. It has been found, for instance, that the subjective difficulty of a concept is directly related to its ``boolean complexity'', defined as the shortest logical description of a concept \citep{feldman2000,feldman2003,feldman2006}. In the same vein, visual detection of shapes has been shown to be related to contour complexity \citep{wilder2011}.
+
+More generally, perceptual organization itself has been described as based on simplicity or, equivalently, likelihood \citep{chater1996,chater2003}, in a model reconciling the complexity approach (perception is organized to minimize complexity) and a probability approach (perception is organized to maximize likelihood), very much in line with our view in this paper. Even the perception of similarity may be viewed through the lens of (conditional) complexity \citep{hahn2003}.
+
+Randomness and complexity also play an important role in modern approaches to selecting the ``best'' among a set of candidate models \citep[i.e., model selection; e.g.,][]{myung_model_2006,kellen_recognition_2013}, as discussed in more detail below in the section called ``Relationship to complexity based model selection''.
+
+
+Complexity can also shed light on short term memory storage and recall, more specifically, on the process underlying \emph{chunking}. It is well known that the short term memory span lies between 4 and 7 items/chunks  \citep{miller1956magical,cowan2001magical}. When instructed to memorize longer sequences of, for example, letters or numbers, individuals employ a strategy of subdividing the sequence into chunks \citep{baddeley1975word}. However, the way chunks are created remains largely unexplained. A plausible explanation might be that chunks are built via minimizing the complexity of each chunk. For instance, one could split the sequence ``AAABABABA'' into the two substrings ``AAA'' and ``BABABA''. Very much in line with this idea, \citet*{mathy2012} provided evidence for the hypothesis that chunks are units of ``maximally compressed code''. In the above situation, both ``AAA'' and ``BABABA'' are supposedly of low complexity, and the chunks tailored to minimize the length of the resulting compressed information.
+
+Outside the psychology of short term memory, the complexity of pseudo-random human-generated sequences is related to the strength of executive functions, specifically to inhibition or sustained attention \citep{towse07}. In random generation tasks, participants are asked to generate random-looking sequences, usually involving numbers from 1 to 6 (dice task) or digits between 1 and 9. These tasks are easy to administer and very informative in terms of higher level cognitive abilities. They have been used in investigations in various areas of psychology, such as visual perception \citep{cardaci2009}, aesthetics \citep{boon2011}, development \citep{scibinetti2011,pureza2013}, sport \citep{audiffren2009}, creativity \citep{zabelina2012}, sleep \citep{heuer2005sleep,bianchi2013}, and obesity \citep{crova2013}, to mention a few. In neuropsychology, random number generation tasks and other measures of behavioral or brain activity complexity have been used to investigate different disorders, such as schizophrenia \citep{koike2011}, autism \citep{lai2010,maes2012,fournier2013}, depression \citep{fernandez2009}, PTSD \citep{pearson2011,curci2013}, ADHD \citep{sokunbi2013}, OCD \citep{bedard2009}, hemispheric neglect \citep{loetscher2009neglect}, aphasia \citep{Proios08}, and neurodegenerative syndromes such as Parkinson's and Alzheimer's disease \citep{brown1990,hahn2012}.
+
+Perceived complexity and randomness are also of the utmost importance within the ``new paradigm psychology of reasoning'' \citep{over09}. As an example, let us consider the representativeness heuristic \citep{tversky1974judgment}. Participants usually believe that the sequence ``HTHTHTHT'' is less likely to occur than the sequence ``HTHHTHTT'' when a fair coin is tossed 8 times. This of course is mathematically wrong, since all sequences of 8 heads or tails, including these two, share the same probability of occurrence ($1/2^{8}$). The  ``old paradigm'' was concerned with finding such biases and attributing irrationality to individuals \citep{kahneman1982judgment}. In the ``new paradigm'' on the other hand, researchers try to discover the ways in which sound probabilistic or Bayesian reasoning can lead to the observed errors \citep{manktelow1993rationality,hahn_perceptions_2009}. 
+
+We can find some kind of rationality behind the wrong answer, by assuming that individuals do not estimate the probability that a fair coin will produce a particular string $s$ but rather the ``inverse'' probability that the process underlying this string is mere chance. More formally, if we use $s$ to denote a given string, $R$ to denote the event where a string has been produced by a random process, and $D$ to denote  the complementary event where a string has been produced by a non-random (or deterministic) process, then individuals may assess $P(R|s)$ instead of $P(s|R)$. If they do so within the framework of formal probability theory (and the new paradigm postulates that individuals tend to do so), then their estimation of the probability should be such that Bayes' theorem holds:
+\begin{equation} \label{eq:bayes}
+P(R|s)=\frac{P(s|R)P(R)}{P(s|R)P(R)+P(s|D)P(D)}.
+\end{equation}
+
+
+Alternatively, we could assume that individuals do not estimate the complete inverse $P(R|s)$ but just the posterior odds of a given string being produced by a random rather than a deterministic process \citep{williams_why_2013}. Again, these odds are given by Bayes' theorem:
+\begin{equation} \label{eq:post-odds}
+\frac{P(R|s)}{P(D|s)}=\frac{P(s|R)}{P(s|D)}\times\frac{P(R)}{P(D)}.
+\end{equation}
+The important part of Equation~\ref{eq:post-odds} is the first term on the right-hand side, as it is a function of the observed string $s$ and independent of the prior odds $P(R)/P(D)$. This likelihood ratio, also known as the Bayes factor \citep{kass_bayes_1995}, quantifies the evidence brought by the string $s$ based on which the prior odds are changed. In other words, this part corresponds to the ``amount of evidence [$s$] provides in favor of a random generating process'' \citep{hsu2010subjective}. 
+
+The numerator of the Bayes factor, $P(s|R)$, is easily computed, and amounts to $1/2^{8}$ in the example given above. However the other likelihood, the probability of $s$ given that it was produced by an (unknown) deterministic process, $P(s|D)$, is more problematic. Although this probability has been informally linked to complexity, to the best of our knowledge no formal account of that link has ever been provided in the psychological literature, although some authors have suggested such a link \citep[e.g.,][]{chater1996}. As we will see, however, computer scientists have fruitfully addressed this question \citep{solomonoff1964a,solomonoff1964b,levin1974}. One can think of $P(s|D)$ as the probability that a randomly selected (deterministic) algorithm produces $s$. In this sense, $P(s|D)$ is none other than the so-called \emph{algorithmic probability of} $s$. This probability is formally linked to the algorithmic complexity $K(s)$ of the string $s$ by the following formula (see below for more details): 
+\begin{equation} \label{eq:comp1}
+K(s)\approx -\log_{2}(P(s|D)).
+\end{equation}
+
+A normative measure of complexity and a way to make sense of $P(s|D)$ are crucial to several areas of research in psychology. In our example concerning the representativeness heuristic, one could see some sort of rationality in the usually observed behavior if in fact the complexity of $s_1 = \mbox{``HTHTHTHT''}$ were lower than that of $s_2 = \mbox{``HTHHTHTT''}$ (which it is, as shown below). Then following Equation~\ref{eq:comp1}, $P(s_1|D) > P(s_2|D)$. Consequently, the Bayes factor for a string being produced by a random process would be larger for $s_2$ than for $s_1$. In other words, even when ignoring the question of the priors for a random versus deterministic process (which are inherently subjective and debatable) $s_2$ provides more evidence for a random process than $s_1$. 
+
+Researchers have hitherto relied on an intuitive perception of complexity, or in the last decades developed and used several tailored measures of randomness or complexity  \citep{towse1998,barbasz2008estimate,schulter2010mittenecker,williams_why_2013,hahn_perceptions_2009} in the hope of approaching algorithmic complexity. Because all these measures rely upon choices that are partially subjective and each focuses on a single characteristic of chance, they have come under strong criticism \citep{gauvrit2014}. Among these measures, some have a sound mathematical basis, but focus on particular features of randomness. For that reason, contradictory results have been reported \citep{wagenaar1970,wiegersma1984}. The mathematical definition of complexity, known as Kolmogorov-Chaitin complexity theory \citep{kolmogorov1965,chaitin1966}, or simply algorithmic complexity, has been recognized as the best possible option by mathematicians \citep{li2008}  and psychologists \citep{griffiths2003,griffiths2004}. However, because algorithmic complexity was thought to be impossible to approximate for the short sequences we usually deal with in psychology (sequences of 5-50 symbols, for instance), it has seldom been used.
+
+In this article, we will first briefly describe algorithmic complexity theory and its deep links with algorithmic probability (leading to a formal definition of the probability that an unknown deterministic process results in a particular observation $s$). We will then describe the practical limits of algorithmic complexity and present a means to overcome them, namely the coding theorem method, the root of \emph{algorithmic complexity for short strings} (ACSS). A new set of tools, bundled in a package for the statistical programming language \texttt{R} \citep{r2014} and based on ACSS, will then be described. Finally, three short applications will be presented for illustrative purposes.
+
+
+
+\section{Algorithmic complexity for short strings}
+\subsection{Algorithmic complexity}
+
+
+As defined by Alan Turing, a universal Turing machine is an abstraction of a general-purpose computing device capable of running any computer program. Among universal Turing machines, some are \emph{prefix free}, meaning that they only accept programs finishing with an ``END'' symbol. 
+The algorithmic complexity~\citep{kolmogorov1965,chaitin1966} -- also
+called Kolmogorov or Kolmogorov-Chaitin complexity -- of a string $s$
+is given by the length of the shortest computer program running on a
+universal prefix-free Turing machine $U$ that produces $s$ and then
+halts, or formally written, $K_U(s)=\min\{|p| : U(p)=s\}$.  From
+the \emph{invariance theorem}~\citep{calude2002,li2008}, we know that
+the impact of the choice of $U$ (that is, of a specific Turing
+machine), is limited and independent of $s$. It means that for
+  any other universal Turing machine $U'$, the absolute value of
+  $K_U(s)-K_{U'}(s)$ is bounded by some constant $C_{U,U'}$ which
+  depends on $U$ and $U'$ but not on the specific $s$. So $K(s)$ is
+  usually written instead of $K_U(s)$. 
+  
+
+More precisely, the invariance theorem states that $K(s)$ computed on
+two different Turing machine will differ at most by an additive constant $c$, which is independent of $s$, but that can be arbitrary large. One consequence of this theorem is that there
+actually are infinitely many different complexities, depending on the
+Turing machine. Talking about ``the algorithmic complexity'' of a string is a
+shortcut. This theorem also guarantees that asymptotically (or for
+long strings), the choice of the Turing machine will have limited
+impact. However, for short strings we are considering here, the impact
+could be important, and different Turing machines can yield different values, or
+even different orders. This limitation is not due to technical reasons,
+but the fact that there is no objective default universal Turing machine one could pick to
+compute ``the'' complexity of a string. As we will explain below, our
+approach seeks to overcome this difficulty by defining what could be
+thought of as a ``mean complexity'' as computed with random
+Turing machines. Because we do not choose a particular Turing machine but sample the space of
+all possible Turing machine (running on a blank tape), the result will be an objective estimation of algorithmic complexity, although it will of course differ from most specific $K_{U}$.
+
+
+Algorithmic complexity gave birth to a definition of randomness. To put it in a nutshell, a string is random if it is complex (i.e. exhibit no structure). Among the most striking results of algorithmic complexity theory is the convergence in definitions of randomness. For example, using martingales, Schnorr (\citeyear{schnorr1973}) proved that Kolmogorov random (complex) sequences are effectively unpredictable and vice versa; Chaitin~(\citeyear{chaitin2004})  proved that Kolmogorov random sequences pass all effective statistical tests for randomness and vice versa, and are therefore equivalent to Martin-L\"{o}f randomness~\citep{martin1966}, hence the general acceptance of this measure. $K$ has become the accepted ultimate universal definition of complexity and randomness in mathematics and computer science~\citep{downey2008, nies2009, zenil2011book}.
+
+
+One generally offered caveat regarding $K$ is that it is \emph{uncomputable}, meaning there is no Turing machine or algorithm that, given a string $s$, can output $K(s)$, the length of the shortest computer program $p$ that produces $s$. In fact, the theory shows that no computable measure can be a universal complexity measure. However, it is often overlooked that $K$ is \emph{upper semi-computable}. This means that it can be effectively approximated from above. That is, that there are effective algorithms, such as lossless compression algorithms, that can find programs (the decompressor $+$ the data to reproduce the string $s$ in full) giving upper bounds of Kolmogorov complexity. However, these methods are inapplicable to short strings (of length below 100), which is why they are seldom used in psychology. One reason why compression algorithms are unadapted to short strings
+is that compressed files include not only the instructions to
+  decompress the string, but also file headers and other data
+  structures. It makes that for a short string $s$, the size of a
+  compressed text file with just $s$ is longer than $|s|$. Another
+reason is that, as it is the case with the complexity $K_U$
+  associated with a particular Turing machine $U$, the choice of the
+compression algorithm is crucial for short strings, because of
+  the invariance theorem.
+
+
+
+\subsection{Algorithmic probability and its relationship to algorithmic complexity}
+
+A universal prefix-free Turing machine $U$, can also be used to define a probability measure $m$ on the set of all possible strings by setting $m(s)=\sum_{p:U(p)=s} 1/2^{|p|}$, where $p$ is a program of length $|p|$, and $U(p)$ the string produced by the Turing machine $U$ fed with program $p$. The Kraft inequality~\citep{calude2002} guarantees that $0\leq \sum_{s} m(s) < 1$. The number $m(s)$ is the probability that a randomly selected deterministic program will produce $s$ and then halt, or simply the \emph{algorithmic probability of $s$,} and provides a formal definition of $P(s|D)$, where $D$ stands for a generic deterministic algorithm \citep[for a more detailed description see][]{gauvrit2014}. Numerical approximations to
+$m(s)$ using standard Turing machines have shed light on the stability
+and robustness of $m(s)$ in the face of changes in $U$, providing
+examples of applications to various areas leading to semantic
+measures~\citep{cilibrasi2005,cilibrasi2007}, which today are accepted
+as regular methods in areas of computer science and linguistics, to
+mention but two disciplines.
+
+
+Recent work~\citep{delahaye2012,zenil2011thesis} has suggested that  approximating $m(s)$ could in practice be used to approximate $K$ for short strings. Indeed, the \emph{algorithmic coding theorem}~\citep{levin1974} establishes the connection as $K(s) =-\log_2 m(s)+O(1)$, where $O(1)$ is bounded independently of $s$. This relationship shows that strings with low $K(s)$ have the highest probability $m(s)$, while strings with large $K(s)$ have a correspondingly low probability $m(s)$ of being generated by a randomly selected deterministic program. This approach, based upon and motivated by algorithmic probability, allows us to approximate $K$ by means other than lossless compression, and has been recently applied  to financial time series ~\citep{brandouy2012, zenil2011} and in psychology~\citep[e.g.][]{gauvrit2014vision}. The approach is equivalent to finding the best possible
+  compression algorithm with a particular computer program
+  enumeration.
+  
+  
+Here, we extend a previous method addressing the question of binary strings' complexity~\citep{gauvrit2014} in several ways. First, we provide a method to estimate the complexity of strings based on any number of different symbols, up to 9 symbols. Second, we provide a fast and user-friendly algorithm to compute this estimation. Third, we also provide a method to approximate the complexity (or the local complexity) of strings of medium length (see below).
+
+
+\subsection{The invariance theorem and the problem with short 
+    strings}
+\label{sec:ferthe-invar-theor}
+
+The invariance theorem does not provide a reason to expect $-\log_2(m(s))$ and $K(s)$ to induce the same ordering over short strings. Here, we have chosen a simple and standard Turing machine model \citep[the Busy Beaver model;][]{rado1962}\footnote{A demonstration is available online at \texttt{http://demonstrations.wolfram.com/BusyBeaver/}} in order to build an output distribution based on the seminal concept of algorithmic probability. This output distribution then serves as an objective complexity measure producing results in agreement both with intuition and with $K(s)$ to which it will converge for long strings guaranteed by the invariance theorem.
+Furthermore, we have found that estimates of $K(s)$ are strongly correlated to those produced by lossless compression algorithms as they have traditionally been used as estimators of $K(s)$ (compressed data is a sufficient test of non-randomness, hence of low $K(s)$), when both techniques (the coding theorem method and lossless compression) overlap in their range of application for medium size strings in the order of hundreds to 1K bits.
+
+The lack of guarantee in obtaining $K(s)$ from $-\log_2(m(s))$ is
+  a problem also found in the most traditional method to estimate
+  $K(s)$. Indeed, there is no guarantee that some lossless compressor
+  algorithm will be able to compress a string that is compressible
+  by some (or many) other(s). We do have statistical evidence that, at
+  least with the Busy Beaver model, extending or reducing the
+  Turing machine sample space does not impact the order 
+  \citep{Kolmo2D,soler2012,soler2013}. We also found a correlation in
+  output distribution using very different computational formalisms,
+  e.g. cellular automata and Post tag systems \citep{AlgNatZenil}. We have also shown \citep{Kolmo2D} that $-\log_2(m(s))$
+produces results compatible with compression methods 
+ $K(s)$, and strongly correlates to direct $K(s)$
+calculation \citep[length of first shortest Turing machine found producing $s$;][]{soler2013}.
+
+
+
+\subsection{The coding theorem method in practice}
+
+The basic idea at the root of the coding theorem method is to compute an approximation of $m(s)$. Instead of choosing a particular Turing machine, we ran a huge sample of Turing machines, and saved the resulting strings. The distribution of resulting strings gives the probability that a randomly selected Turing machine (equivalent to a universal Turing machine with a randomly selected program) will result in a given string. It therefore approximates $m(s)$. From this, we estimate an approximation $K$ of the algorithmic complexity of any string $s$ using the equation $K(s)=-\log_{2}(m(s))$. To put it in a nutshell again: A string is complex and henceforth random if the likelihood of it being produced by a randomly selected algorithm is low, which we estimated as described in the following.
+
+To actually build the frequency distributions of strings with different numbers of symbols, we used a Turing machine simulator, written in \texttt{C++}, running on a supercomputer of middle-size at CICA (Centro Inform\'atico Cient\'ifico de Andaluc\'ia). The simulator runs Turing machines in $(n,m)$ ($n$ is the number of states of the Turing machine, and $m$ the number of symbols it uses) over a blank tape and stores the output of halting computations. For the generation of random machines, we used the implementation of the Mersenne Twister in the Boost \texttt{C++} library.
+
+\begin{table}[t!]
+\centering
+\begin{tabular}{cccc}
+  \hline
+$(n,m)$ & Steps & Machines & Time \\
+  \hline
+(5,2) & 500 &  $9\,658\,153\,742\,336$  &
+      450 days \\
+      (4,4) & 2000 & $3.34 \times 10^{11}$ & 62 days \\
+      (4,5) & 2000 & $2.14\times 10^{11}$  & 44 days \\
+      (4,6) & 2000 & $1.8\times 10^{11}$  & 41 days\\
+      (4,9) & 4000 & $2\times 10^{11}$ & 75 days  \\
+   \hline
+\end{tabular}
+\caption{Data of the computations to build the frequency distributions}
+\label{tab:samplesData}
+\end{table}
+  
+Table~\ref{tab:samplesData} summarizes the size of the computations to build the distributions. The data corresponding to $(5,2)$ comes from a full
+exploration of the space of Turing machines with 5 states and 2
+symbols, as explained in Soler-Toscano, Zenil, Delahaye and Gauvrit~\citeyear{soler2012,soler2013}. All other
+data, previously unpublished, correspond to samples of machines. The second column is the runtime cut. As the detection of non-halting machines is an undecidable problem, we stopped the computations exceeding that runtime. To determine the runtime bound, we first picked a sample of machines with an apt runtime $T$. For example, in the case of $(4,4)$, we ran $1.68 \times 10^{10}$ machines with a runtime cut of 8000 steps. For halting machines in that sample, we built the runtime distribution (Fig.~\ref{fig:runtime44}). Then we chose a runtime lower than $T$ with an accumulated halting probability very close to 1. That way we chose 2000 steps for
+$(4,4)$. In Soler-Toscano et al.~\citeyear{soler2012} we argued that, following this methodology, we were able to cover the vast majority of halting machines.
+
+\begin{figure}[b]
+  \centering
+    \includegraphics[width=.45\textwidth]{runtime44.pdf}
+  \caption{Runtime distribution in $(4,4)$. More than 99.9999\% of the Turing machines that stopped in 8000 steps or less actually halted before 2000 steps.}
+  \label{fig:runtime44}
+\end{figure}
+
+
+The third column in Table~\ref{tab:samplesData} is the size of the
+sample, that is, the machines that were actually run at the \texttt{C++}
+simulator. After these computations, several symmetric completions were
+applied to the data, so in fact the number of machines represented in
+the samples is greater. For example, we only considered machines
+moving to the right at the initial transition. So we complemented the set
+of output strings with their reversals. More details about the
+shortcuts to reduce the computations and the completions can be found
+elsewhere~\citep{soler2013}. The last column in Table~\ref{tab:samplesData} is an
+estimate of the time the computation would have taken on a
+single processor at the CICA supercomputer. As we used between 10 and 70 processors, the actual times the computations took were shorter. In the following paragraphs we offer some details about the datasets obtained for each set of symbols. 
+
+
+\subsubsection{(5,2)}
+\label{sec:5-2}
+
+This distribution is the only one previously
+published~\citep{soler2012,gauvrit2014}. It consists of 99\,608 different binary
+strings. All strings up to length 11 are included, and only 2 strings
+of length 12 are missing. 
+
+
+\subsubsection{(4,4)}
+\label{sec:4-4}
+
+After applying the symmetric completions to the $3.34\times 10^{11}$ machines in the sample, we obtained a dataset representing the
+output of $325\,433\,427\,739$ halting machines producing
+$17\,768\,208$ different string patterns\footnote{Two strings correspond to the same pattern if one is obtained from the other by changing the symbols, such as ``11233'' and ``22311''. The pattern is the structure of the string, in this example described as ``one symbol repeated once, a second one, and a third one repeated once''. Given the definition of Turing Machines, strings with the same patterns always share the same complexity.}. To
+reduce the file size and make it usable in practice, we selected only those patterns with 5 or more occurrences, resulting in a total of $1\,759\,364$ string patterns. In the final dataset, all strings comprising 4 symbols up to length 11 are represented by these patterns.
+
+\subsubsection{(4,5)}
+\label{sec:4-5}
+
+After applying the symmetric completions, we obtained a dataset
+corresponding to the output of $220\,037\,859\,595$ halting
+machines producing $39\,057\,551$
+different string patterns. Again, we selected only those patterns with 5 or more
+occurrences,  resulting in a total of $3\,234\,430$ string patterns. In the final dataset, all strings comprising 5 symbols up to length 10 are represented by these patterns. 
+
+\subsubsection{(4,6)}
+\label{sec:4-6}
+
+After applying the symmetric completions,we obtained a dataset
+corresponding to the output of $192\,776\,974\,234$ halting machines
+producing $66\,421\,783$ different string patterns. Here we selected only
+those patterns with 10 or more occurrences, resulting in a total of $2\,638\,374$ string
+patterns. In the final dataset, all strings with 6 symbols up to length 10 are represented
+by these patterns.
+
+\subsubsection{(4,9)}
+\label{sec:4-9}
+
+After applying the symmetric completions, we obtained
+$231\,250\,483\,485$ halting Turing machines  
+producing $165\,305\,964$
+different string patterns. We selected only those with 10 or more occurrences, resulting in a total of $5\,127\,061$ string patterns. In the final dataset, all strings comprising 9 symbols up to length 10 are represented by these
+patterns. 
+
+
+\subsubsection{Summary}
+We approximated the algorithmic complexity of short strings (ACSS) using the coding theorem method by running huge numbers of randomly selected Turing machines (or all possible Turing machines for strings of only 2 symbols) and recorded their halting state. The resulting distribution of strings obtained approximates the complexity of each string; a string that was produced by more Turing machines is less complex (or random) than one produced by fewer Turing machines. The results of these computations, one dataset per number of symbols (2, 4, 5, 6, and 9), were bundled and made freely available. Hence, although the initial computation took weeks, the distributions are now readily available for all researchers interested in a formal and mathematically sound measure of the  complexity of short strings.
+
+
+
+\section{The \texttt{acss} packages}
+
+
+To make ACSS available, we have released two packages for the statistical programming language \texttt{R} \citep{r2014} under the GPL license \citep{gplv3} which are available at the Central R Archive Network (CRAN; \url{http://cran.r-project.org/}). An introduction to \texttt{R} is, however, beyond the scope of this manuscript. We recommend the use of \texttt{RStudio} (\url{http://www.rstudio.com/}) and refer the interested reader to more comprehensive literature \citep[e.g.,][]{jones_introduction_2009,maindonald_data_2010,matloff_art_2011}.
+
+
+The first package, \CRANpkg{acss.data}, contains only the calculated datasets  described in the previous section in compressed form (the total size is 13.9 MB) and should not be used directly. The second package, \CRANpkg{acss}, contains (a) functions to access the datasets and obtain ACSS and (b) functions to calculate other measures of complexity, and is intended to be used by researchers in psychology who wish to analyze short or medium-length (pseudo-)random strings. When installing or loading \CRANpkg{acss} the data-only package is automatically installed or loaded. To install both packages, simply run \texttt{install.packages("acss")} at the \texttt{R} prompt. After installation, the packages can be loaded with \texttt{library("acss")}.\footnote{More information is  available at \url{http://cran.r-project.org/package=acss} and the documentation for all functions is available at \url{http://cran.r-project.org/web/packages/acss/acss.pdf}.} The next section describes the most important functions currently included in the package.
+
+\subsection{Main functions}
+All functions within \CRANpkg{acss} have some common features. Most importantly, the first argument to all functions is \texttt{string}, corresponding to the string or strings for which one wishes to obtain the complexity measure. This argument necessarily needs to be a character vector (to avoid issues stemming from automatic coercion). In accordance with \texttt{R}'s general design, all functions are fully vectorized, hence \texttt{string} can be of length $> 1$ and will return an object of corresponding size. In addition, all functions return a named object, the names of the returned objects corresponding to the initial strings.
+
+\subsubsection{Algorithmic complexity and probability}
+The main objective of the \CRANpkg{acss} package is to implement a convenient version of algorithmic complexity and algorithmic probability for short strings. The function \texttt{acss()} returns the ACSS approximation of the complexity $K(s)$ of a string $s$ of length between 2 and 12 characters, based on alphabets with either 2, 4, 5, 6, or 9 symbols, which we shall hereafter call $K_{2},K_{4},K_{5},K_{6}$ and $K_{9}$. The result is thus an approximation of the length of the shortest program running on a Turing machine that would produce the string and then halt. 
+
+The function \texttt{acss()} also returns the observed probability $D(s)$ that a string $s$ of length up to 12 was produced by a randomly selected deterministic Turing machine. Just like $K$, it may be based on alphabets of 2, 4, 5, 6 or 9 symbols, hereafter called $D_{2}, D_{4},  ..., D_{9}$. As a consequence of returning both $K$ and $D$, \texttt{acss()} per default returns a matrix \footnote{Remember (e.g., Equation~\ref{eq:comp1}) that the measures $D$ and $K$ are linked by simple relations derived from the coding theorem method : $$K(s)=-\text{log}_{2}(D(s))\qquad D(s)=2^{-K(s)}.$$}. Note that the first time a function accessing \texttt{acss.data} is called within a \texttt{R} session, such as \texttt{acss()}, the complete data of all strings is loaded into the RAM which takes some time (even on modern computers this can take more than 10 seconds).
+<<acss_1>>=
+acss(c("aba", "aaa"))
+@
+
+
+Per default, \texttt{acss()} returns $K_9$ and $D_9$, which can be used for strings up to an alphabet of 9 symbols. To obtain values from a different alphabet one can use the \texttt{alphabet} argument (which is the second argument to all \CRANpkg{acss} functions), which for \texttt{acss()} also accepts a vector of length $> 1$. If a string has more symbols than are available in the alphabet, these strings will be ignored:
+<<acss_2>>=
+
+acss(c("01011100", "00030101"), alphabet = c(2, 4))
+@
+
+
+
+\subsubsection{Local complexity}
+
+When asked to judge the randomness of sequences of medium length (say 10-100) or asked to produce pseudo-random sequences of this length, the limit of human working memory becomes problematic, and individuals likely try to overcome it by subdividing and performing the task on subsequences, for example, by maximizing the local complexity of the string or averaging across local complexities \citep{hahn_experiential_2014,hahn_perceptions_2009}. This feature can be assessed via the \texttt{local\_complexity()} function, which returns the complexity of substrings of a string as computed with a sliding window of substrings of length \texttt{span}, which may range from 2 to 12. The result of the function as applied to a string $s=s_{1}s_{2}\ldots s_{l}$ of length $l$ with a span $k$ is a vector of $l-k+1$ values. The $i$-th value is the complexity (ACSS) of the substring $s_{[i]}=s_{i}s_{i+1}\ldots s_{i+k-1}$. 
+
+As an illustration, let's consider the 8-character long string based on a 4-symbol alphabet, ``aaabcbad''. The local complexity of this string with \texttt{span} $= 6$ will return $K_{4}(\text{aaabcb})$, $K_{4}(\text{aabcba})$, and $K_{4}(\text{abcbad})$, which equals  $(18.6, 19.4, 19.7)$:
+<<local_1>>=
+local_complexity("aaabcbad", alphabet=4, span=6)
+@
+
+\subsubsection{Bayesian approach}
+
+As discussed in the introduction, complexity may play a crucial role when combined with Bayes' theorem \citep[see also][]{williams_why_2013,hsu2010subjective}. Instead of the observed probability $D$ we actually may be interested in the likelihood of a string $s$ of length $l$ given a deterministic process $P(s|D)$. As discussed before, this likelihood is trivial for a random process and amounts to $P(s|R) = 1/m^l$, where $m$, as above, is the size of the alphabet. To facilitate the corresponding usage of ACSS, \texttt{likelihood\_d()} returns the likelihood $P(s|D)$, given the actual length of $s$. This is done by taking $D(s)$ and normalizing it with the sum of all $D(s_i)$ for all $s_i$ with the same length $l$ as $s$ (note that this also entails performing the symmetric completions). As expected in the beginning, the likelihood of ``HTHTHTHT'' is larger than that of  ``HTHHTHTT'' under a deterministic process:
+<<Bayesian_1>>=
+likelihood_d(c("HTHTHTHT","HTHHTHTT"), alphabet=2)
+@
+
+With the likelihood at hand, we can make full use of Bayes' theorem, and \CRANpkg{acss} contains the corresponding functions. One can either obtain the likelihood ratio (Bayes factor) for a random rather than deterministic process via function \texttt{likelihood\_ratio()}. Or, if one is willing to make assumptions on the prior probability with which a random rather than deterministic process is responsible (i.e., $P(R) = 1-P(D)$) one can obtain the posterior probability for a random process given $s$, $P(R|s)$, using \texttt{prob\_random()}. The default for the prior is $P(R) = 0.5$. 
+<<Bayesian_2>>=
+likelihood_ratio(c("HTHTHTHT", "HTHHTHTT"), alphabet = 2)
+prob_random(c("HTHTHTHT", "HTHHTHTT"), alphabet = 2)
+@
+
+\subsubsection{Entropy and second-order entropy}
+Entropy \citep{barbasz2008estimate, shannon1948} has been used for decades as a measure of complexity. It must be emphasized that (first order) entropy does not capture the structure of a string, and only depends on the relative frequency of the symbols in the said string. For instance, the string ``0101010101010101'' has a greater entropy than ``0100101100100010'' because the first string is balanced in terms of 0's and 1's. According to entropy, the first string, although it is highly regular, should be considered more complex or more random than the second one.
+
+Second-order entropy has been put forward to overcome this inconvenience, but it only does so partially. Indeed, second-order entropy only captures the narrowly local structure of a string. For instance, the string ``01100110011001100110...'' maximizes second-order entropy, because the four patterns 00, 01, 10 and 11 share the same frequency in this string. The fact that the sequence is the result of a simplistic rule is not taken into account. Notwithstanding these strong limitations, entropy has been extensively used. For that historical reason, \CRANpkg{acss} includes two functions, \texttt{entropy()} and \texttt{entropy2()} (second order entropy).
+
+\subsubsection{Change complexity}
+Algorithmic complexity for short strings is an objective and universal normative measure of complexity approximating Kolmogorov-Chaitin complexity. ACSS helps in detecting \emph{any} computable departures from randomness. This is exactly what researchers seek when they want to assess the formal quality of a pseudo-random production. However, psychologists may also wish to assess complexity as it is perceived by human participants. In that case, algorithmic complexity may be too sensitive. For instance, there exists a (relatively) short program computing the decimals of $\pi$. However, faced with that series of digits, humans are unlikely to see any regularity: algorithmic complexity identifies as non-random some series that will look random to most humans.
+
+When it comes to assessing \emph{perceived} complexity, the tool developed by Aksentijevic and Gibson (\citeyear{aksentijevic2012}), named ``change complexity'', is an interesting alternative. It is based on the idea that humans' perception of complexity depends largely on the changes between one symbol and the next. Unfortunately, change complexity is, to date, only available for binary strings. As change complexity is to our knowledge not yet included in an \texttt{R}-package, we have implemented it in \CRANpkg{acss} in function \texttt{change\_complexity()}.
+
+
+\subsection{A comparison of complexity measures}
+There are several complexity measures based on the coding theorem method, because the computation depends on the set of possible symbols the Turing machines can manipulate. To date, the package provides ACSS for 2, 4, 5, 6 and 9 symbols, giving 5 different measures of complexity. As we will see, however, these measures are strongly correlated. As a consequence one may use $K_{9}$ to assess the complexity of strings with 7 or 8 different symbols, or $K_{4}$ to assess the complexity of a string with 3 symbols. Thus in the end any alphabet size between 2 and 9 is available.  Also, these measures are mildly correlated to change complexity, and poorly to entropy.
+
+Any binary string can be thought of as an $n$-symbol string ($n\ge 2$) that happens to use only 2 symbols. For instance, ``0101'' could be produced by a machine that only uses 0s and 1s, but also by a machine that uses digits from 0 to 9. Hence ``0101'' may be viewed as a word based on the alphabet $\{ 0,1\}$, but also based on $\{ 0,1, 2, 3, 4\}$, etc. Therefore, the complexity of a binary string can be rated by $K_{2}$, but also by $K_{4}$ or $K_{5}$. We computed $K_{n}$ (with $n\in \{ 2,4,5,6,9\}$), entropy and change complexity of all 2047 binary strings of length up to 11. Table \ref{tab:BinaryComp} displays the resulting correlations and Figure \ref{fig:BinaryComp} shows the corresponding scatter plots. The different algorithmic complexity estimates through the coding theorem method are closely related, with correlations above 0.999 for $K_{4},K_{5},K_{6}$ and $K_{9}$. $K_{2}$ is less correlated to the others, but every correlation stands above 0.97. There is a mild linear relation between ACSS and change complexity. Finally, entropy is only weakly linked to algorithmic and change complexity.
+
+\begin{table}[b]
+\centering
+\begin{tabular}{lrrrrrr}
+  \hline
+ & K2 & K4 & K5 & K6 & K9 & Ent \\ 
+  \hline
+  K4 & 0.98 &  &  &  &  &    \\ 
+  K5 & 0.97 & 1.00 &  &  &  &    \\ 
+  K6 & 0.97 & 1.00 & 1.00 &  &  &    \\ 
+  K9 & 0.97 & 1.00 & 1.00 & 1.00 &  &    \\ 
+  Ent & 0.32 & 0.36 & 0.36 & 0.37 & 0.38 &  \\ 
+  Change & 0.69 & 0.75 & 0.75 & 0.75 & 0.75 & 0.50 \\ 
+   \hline
+\end{tabular}
+\caption{Correlation matrix of complexity measures computed on all binary strings of length up to 11. ``Ent'' stands for entropy, and ``Change'' for change complexity.}
+\label{tab:BinaryComp}
+\end{table}
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=.5\textwidth]{ComparisonBinary.jpg}  % pdf also available (but 6.1 Mo)
+\caption{Scatter plot showing the relation between measures of complexity on every binary string with length from 1 to 11. ``Change'' stands for change complexity}
+\label{fig:BinaryComp}
+\end{center}
+\end{figure}
+
+
+
+The correlation between different versions of ACSS (that is, $K_{n}$) may be partly explained by the length of the strings. Unlike entropy, ACSS is sensitive to the number of symbols in a string. This is not a weakness. On the contrary, if the complexity of a string is linked to the evidence it brings to the chance hypothesis, it should depend on length. Throwing a coin to determine if it is fair and getting HTHTTTHH is more convincing than getting just HT. Although both strings are balanced, the first one should be considered more complex because it affords more evidence that the coin is fair (and not, for instance, bound to alternate heads and tails). However, to control for the effect of length and extend our previous result to more complex strings, we picked up 844 random 4-symbol strings of length 12. Change complexity is not defined for non-binary sequences, but as Figure \ref{fig:FourSymbolsComp}  and Table \ref{tab:FourSymbolsComp} illustrate, the different ACSS measures are strongly correlated, and mildly correlated to entropy.
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{FourSymbolsComp.pdf}
+\caption{Scatterplot matrix computed with 844 randomly chosen 12-character long 4-symbol strings.}
+\label{fig:FourSymbolsComp}
+\end{center}
+\end{figure}
+
+\begin{table}[b]
+\centering
+\begin{tabular}{lrrrr}
+  \hline
+ & K4 & K5 & K6 & K9  \\ 
+  \hline 
+  K5 & 0.94 &  &  &   \\ 
+  K6 & 0.92 & 0.95 &  &   \\ 
+  K9 & 0.88 & 0.92 & 0.94 &   \\ 
+  Entropy & 0.52 & 0.58 & 0.62 & 0.69  \\ 
+   \hline
+\end{tabular}
+\caption{Pearson's correlation between complexity measures, computed from 844 random 12-character long 4-symbol strings.}
+\label{tab:FourSymbolsComp}   
+\end{table}
+
+\section{Applications}
+In this last section, we provide three illustrative applications of ACSS. The first two are short reports of new and illustrative experiments and the third one is a re-analysis of previously published data \citep{matthews2013}. Although these experiments are presented to illustrate the use of ACSS, they also provide new insights into subjective probability and the perception of randomness. Note that all the data and analysis scripts for these applications are also part of \CRANpkg{acss}.
+
+\subsection{Experiment 1: Humans are ``better than chance''}
+Human pseudo-random sequential binary productions have been reported to be overly complex, in the sense that they are more complex than the average complexity of truly random sequences \citep[i.e., sequences of fixed length produced by repeatedly tossing a coin;][]{gauvrit2014}. Here, we test the same effect with non-binary sequences based on 4 symbols. To replicate the analysis, type \texttt{?exp1} at the \texttt{R} prompt after loading \CRANpkg{acss} and execute the examples.
+\subsubsection{Participants}
+A sample of 34 healthy adults participated in this experiment. Ages ranged from 20 to 55 (mean $= 37.65$, SD $= 7.98$). Participants were recruited via e-mail and did not receive any compensation for their participation.
+\subsubsection{Methods}
+Participants were asked to produce at their own pace a series of 10 symbols using ``A'', ``B'', ``C'', and ``D''  that would ``look as random as possible, so that if someone else saw the sequence, she would believe it to be a truly random one''. Participants submitted their responses via e-mail.
+\subsubsection{Results}
+A one sample $t$-test showed that the mean complexity of the responses of participants is significantly larger that the mean complexity of all possible patterns of length 10 ($t(33) = 10.62, p < .0001$). The violin plot in Figure \ref{fig:violinplot} shows that human productions are more complex than random patterns because humans avoid low-complexity strings. On the other hand, human productions did not reach the highest possible values of complexity.
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{PlotHumanVsAll.pdf}
+\caption{Violin plot showing the distribution of complexity of human strings vs. every possible pattern of strings, with 4-symbol alphabet and length 10.}
+\label{fig:violinplot}
+\end{center}
+\end{figure}
+
+\subsubsection{Discussion}
+These results are consistent with the hypothesis that when participants try to behave randomly, they in fact tend to maximize the complexity of their responses, leading to overly complex sequences. However, whereas they succeed in avoiding low-complexity patterns, they cannot build the most complex strings.
+
+
+\subsection{Experiment 2: The threshold of complexity -- a case study}
+Humans are sensitive to regularity and distinguish truly random series from deterministic ones \citep{yamada_pattern_2013}. More complex strings should be more likely to be considered random than simple ones. Here, we briefly address this question through a binary forced choice task. We assume that there exists an individual threshold of complexity for which the probability that the individual identifies a string as random is $.5$. We estimated that threshold for one participant. The participant was a healthy adult male, 42 years old. The data and code are available by calling \texttt{?exp2}.
+
+\subsubsection{Methods}
+A series of 200 random strings of length 10 from an alphabet of 6 symbols, such as ``6154256554'', were generated with the \texttt{R} function \texttt{sample()}. For each string, the participant had to decide whether or not the sequence appeared random.
+
+\subsubsection{Results}
+A logistic regression of the actual complexities of the strings ($K_6$) on the responses is displayed in Figure~\ref{fig:threshold}. The results showed that more complex sequences were more likely to be considered random (slope $=1.9$, $p< .0001$, corresponding to an odds ratio of 6.69). Furthermore, a complexity of 36.74 corresponded to the subjective probability of randomness 0.5 (i.e., the individual threshold was 36.74). 
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{PlotThreshold.pdf}
+\caption{Graphical display of the logistic regression with actual complexities ($K_6$) of 200 strings as independent variable and the observed responses (appears random or not) of one participant as dependent variable. The gray area depicts 95\%-confidence bands, the black dots at the bottom the 200 complexities. The dotted lines show the threshold where the perceived probability of randomness is 0.5.}
+\label{fig:threshold}
+\end{center}
+\end{figure}
+
+
+\subsection{The span of local complexity}
+In a study of contextual effect in the perception of randomness, Matthews (\citeyear{matthews2013}, Experiment 1) showed participants series of binary strings of length 21. For each string, participants had to rate the sequence on a 6-point scale ranging from ``definitely random'' to ``definitely not random''. Results showed that participants were influenced by the context of presentation: sequences with medial alternation rate (AR) were considered highly random when they were intermixed with low AR, but as relatively non-random when intermixed with high AR sequences. In the following, we will analyze the data irrespective of the context or AR.
+
+When individuals judge whether a short string of, for example, 3-6 characters, is random, they probably consider the complete sequence. For these cases, ACSS would be the right normative measure. When strings are longer, such as a length of 21, individuals probably cannot consider the complete sequence at once. Matthews (2013) and others \citep[e.g.,][]{hahn_experiential_2014} have hypothesized that in these cases individuals rely on the local complexity of the string. If this were true, the question remains as to how local the analysis is. To answer this, we will reanalyze Matthews' data.
+
+For each string and each span ranging from 3 to 11, we first computed the mean local complexity of the string. For instance, the string ``XXXXXXXOOOOXXXOOOOOOO'' with span 11 gives a mean local complexity of 29.53. The same string has a mean local complexity of 11.22 with span 5.
+
+<<span_1>>=
+sapply(local_complexity("XXXXXXXOOOOXXXOOOOOOO", alphabet = 2, span = 11), mean)
+
+sapply(local_complexity("XXXXXXXOOOOXXXOOOOOOO", alphabet = 2, 5), mean)
+@
+
+For each span, we then computed $R^{2}$ (the proportion of variance accounted for) between mean local complexity (a formal measure) and the mean randomness score given by the participants in Matthews' (2013) Experiment 1. Figure~\ref{fig:DeterminationBySpan} shows that a span of 4 or 5 best describes the judgments with $R^{2}$ of 54\% and 50\%. Furthermore, $R^{2}$ decreases so fast that it amounts to less than 0.002\% when the span is set to 10. These results suggest that when asked to judge if a string is random, individuals rely on very local structural features of the strings, only considering subsequences of 4-5 symbols. This is very near the suggested limit of the short term memory of 4 chunks (Cowan, 2001). Future researchers could build on this preliminary account to investigate the possible ``span'' of human observation in the face of possibly random serial data. The data and code for this application are available by calling \texttt{?matthews2013}.
+
+\begin{figure}[tb]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{DeterminationBySpan.pdf}
+\caption{$R^{2}$ between mean local complexity with span 3 to 11 and the subjective mean evaluation of randomness.}
+\label{fig:DeterminationBySpan}
+\end{center}
+\end{figure}
+
+\section{Relationship to complexity based model selection}
+
+As mentioned in the beginning, complexity also plays an important role in modern approaches to model selection, specifically within the minimum description length framework~\citep[MDL;][]{grunwald2007minimum, myung_model_2006}. Model selection in this context~\cite[see e.g.][]{myung2014} refers to the process of selecting, among a set of candidate models, the model that strikes the best balance between goodness-of-fit (i.e., how well does the model describe the obtained data) and complexity (i.e., how well does the model describe all possible data or data in general). MDL provides a principled way of combining model fit with a quantification of model complexity that originated in information theory~\citep{rissanen1989stochastic} and is, similar to algorithmic complexity, based on the notion of compressed code. The basic idea is that a model can be viewed as an algorithm that, in combination with a set of parameters, can produce a specific prediction. A model that describes the observed data well (i.e., provides a good fit) is a model that can compress the data well as it only requires a set of parameters and there are little residuals that need to be described in addition. Within this framework, the complexity of a model is the shortest possible code or algorithm that describes all possible data pattern predicted by the model. The model selection index is the length of the concatenation of the code describing parameters and residuals and the code producing all possible data sets. As usual, the best model in terms of MDL is the model with the lowest model selection index. 
+
+The MDL approach differs from the complexity approach discussed in the current manuscript as it focuses on a specific set of models. To be selected as possible candidates, models usually need to satisfy other criteria such as providing explanatory value, need to be a priori plausible, and the parameters should be interpretable in terms of psychological processes \citep{myung2014}. In contrast, algorithmic complexity is concerned with finding the shortest possible description considering all possible models leaving those considerations aside. However, given that both approaches are couched within the same information theoretic framework, MDL converges towards algorithmic complexity if the set of candidate models becomes infinite~\citep{wallace1999minimum}. Furthermore, in the current manuscript we are only concerned with short strings, whereas even in compressed form data and the prediction space of a model are usually comparatively large.
+
+
+\section{Conclusion}
+Until the development of the coding theorem method \citep{soler2012,delahaye2012}, researchers interested in short random strings were constrained to use measures of complexity that focused on particular features of randomness. This has led to a number of (unsatisfactory) measures \citep{towse1998}. Each of these previously used measures can be thought of as a way of performing a particular statistical test of randomness. In contrast, algorithmic complexity affords access to the ultimate measure of randomness, as the algorithmic complexity definition of randomness has been shown to be equivalent to defining a random sequence as one which would pass \emph{every} computable test of randomness. We have computed an approximation of algorithmic complexity for short strings and made this approximation freely available in the \texttt{R} package \CRANpkg{acss}.
+
+Because human capacities are limited, it is unlikely that humans will be able to recognize every kind of deviation from randomness. Subjective randomness does not equal algorithmic complexity, as \citet*{griffiths2004} remind us. Other measures of complexity will still be useful in describing the ways in which human pseudo-random behaviors or the subjective perception of randomness or complexity differ from objective randomness, as defined within the mathematical theory of randomness and advocated in this manuscript. But to achieve this goal of comparing subjective and objective randomness, we also need an objective and universal measure of randomness (or complexity) based on a sound mathematical theory of randomness. Although the uncomputability of Kolmogorov complexity places some limitations on what is knowable about objective randomness, ACSS provides a sensible and practical approximation that researchers can use in real life. We are confident that ACSS will prove very useful as a normative measure of complexity in helping psychologists understand how human subjective randomness differs from  ``true'' randomness as defined by algorithmic complexity.
+
+
+
+\bibliographystyle{jss}
+\bibliography{acss}
+
+\end{document}

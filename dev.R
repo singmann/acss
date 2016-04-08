@@ -10,3 +10,6 @@ require(testthat)
 test_package("acss")
 help(package = "acss")
 release(check=FALSE)
+
+
+build_vignettes()

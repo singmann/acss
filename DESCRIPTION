@@ -14,7 +14,9 @@ Depends:
     acss.data
 Suggests:
     effects,
-    lattice
+    lattice,
+    knitr,
+    rmarkdown
 Description: Main functionality is to provide the algorithmic complexity for
     short strings, an approximation of the Kolmogorov Complexity of a short
     string using the coding theorem method (see ?acss). The database containing
@@ -26,3 +28,4 @@ Description: Main functionality is to provide the algorithmic complexity for
 URL: http://complexitycalculator.com/methodology.html
 License: GPL (>= 2)
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr
