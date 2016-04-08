@@ -3,3 +3,5 @@
 ^examples$
 README.md
 dev.R
+^\.travis\.yml$
+^CONDUCT\.md$
