@@ -4,16 +4,16 @@
 \alias{bdm}
 \title{Block Decomposition Method}
 \usage{
-bdm(string, delta = 1, alphabet = 9, span = 4)
+bdm(string, delta = 1, alphabet = 9, span = 10)
 }
 \arguments{
 \item{string}{\code{character} vector containing the to be analyzed strings (can contain multiple strings).}
 
-\item{delta}{distance between two windows. Default is 1.}
+\item{delta}{distance between two windows. Default is 1 corresponding to a full overlap of the substrings. If \code{delta == span} (the maximum) the decomposition is disjoint, hence a partition.}
 
-\item{alphabet}{\code{numeric}, the number of possible symbols (not necessarily actually appearing in str). Must be one of \code{c(2, 4, 5, 6, 9)} (must be a scalar value in the current implementation). Default is 9.}
+\item{alphabet}{\code{numeric}, the number of possible symbols (not necessarily actually appearing in \code{string}). Must be one of \code{c(2, 4, 5, 6, 9)} (must be a scalar value in the current implementation). Default is 9.}
 
-\item{span}{size of substrings/windows to be created from \code{string}. Default is 4.}
+\item{span}{size of substrings/windows to be created from \code{string}. Default is 10.}
 }
 \description{
 Obtain Complexity of Longer Strings than allowed by ACSS via the Block Decomposition Method.
