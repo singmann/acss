@@ -7,7 +7,7 @@ test_that("acss returns what it should return", {
       ), .Dim = c(2L, 4L), .Dimnames = list(c("01011100", "00030101"
       ), c("K.2", "K.4", "D.2", "D.4")))
   
-  expect_equal(acss(c("01011100", "00030101"), alphabet = c(2, 4)), res1)
+  expect_equal(suppressWarnings(acss(c("01011100", "00030101"), alphabet = c(2, 4))), res1)
   
   # taken from the AcssGuide.pdf
   res2 <- acss("010120123", alphabet = 5)[1,]
