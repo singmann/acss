@@ -22,10 +22,10 @@ Obtain Complexity of Longer Strings than allowed by ACSS via the Block Decomposi
 
 acss("SSOOXFXFOXXOXOXFFXXXSOTTO")  # too long
 
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTO") # default span is 4
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 3)
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTO") # default span is 10
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 4)
 bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 6)
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 11)
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 11) # gives warning
 
 multi <- c(
   "SSOOXFXFOXXOXOXFFXXXSOTTO",
@@ -34,8 +34,12 @@ multi <- c(
 )
 
 bdm(multi)
-bdm(multi, delta = 4, span = 5) 
-bdm(multi, span = 6)
+bdm(multi, span = 5, delta = 2) 
+bdm(multi, delta = 5)
+
+
+# binary bdm should give 57.5664 in this case 
+bdm("010101010101010101", alphabet = 2, span = 12, delta = 1)
 
 }
 
