@@ -1,8 +1,8 @@
 test_that("bdm works", {
   multi <- c(
-    "SSOOXFXFOXXOXOXFFXXXSOTTO",
-    "SSODXFXDOXXOXOXFFXRRSORTO",
-    "DXXXXRRXXXSSOOOXOFFFOOOOO"
+    "SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX",
+    "SSODXFXDOXXOXOXFFXRRSORTOXDOXX",
+    "DXXXXRRXXXSSOOOXOFFFOOOOORFODD"
   )
   expect_is(bdm(multi[1]), "numeric")
   expect_is(bdm(multi), "numeric")

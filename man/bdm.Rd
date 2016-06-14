@@ -4,45 +4,47 @@
 \alias{bdm}
 \title{Block Decomposition Method}
 \usage{
-bdm(string, delta = 1, alphabet = 9, span = 10)
+bdm(string, delta = span, alphabet = 9, span = 10,
+  print_substrings = FALSE)
 }
 \arguments{
 \item{string}{\code{character} vector containing the to be analyzed strings (can contain multiple strings).}
 
-\item{delta}{distance between two windows. Default is 1 corresponding to a full overlap of the substrings. If \code{delta == span} (the maximum) the decomposition is disjoint, hence a partition.}
+\item{delta}{distance between two windows. Default is \code{delta = span} (the maximum) in which the decomposition is disjoint, hence a partition. In the default setting the last substring is not of length \code{span} if the length of the string is not divisible by \code{span}. If \code{delta = 1} the substrings are all of length \code{span} and maximally overlap.}
 
 \item{alphabet}{\code{numeric}, the number of possible symbols (not necessarily actually appearing in \code{string}). Must be one of \code{c(2, 4, 5, 6, 9)} (must be a scalar value in the current implementation). Default is 9.}
 
 \item{span}{size of substrings/windows to be created from \code{string}. Default is 10.}
+
+\item{print_substrings}{logical. Should substrings be printed to the console? Default is \code{FALSE}. Mainly for debugging purposes.}
 }
 \description{
 Obtain Complexity of Longer Strings than allowed by ACSS via the Block Decomposition Method.
 }
 \examples{
+acss("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX")  # too long
 
-acss("SSOOXFXFOXXOXOXFFXXXSOTTO")  # too long
-
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTO") # default span is 10
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 4)
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 6)
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTO", span = 11) # gives warning
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX") # default span is 10
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", span = 5)
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", span = 7) # gives warning
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", span = 7, delta = 1) 
 
 multi <- c(
-  "SSOOXFXFOXXOXOXFFXXXSOTTO",
-  "SSODXFXDOXXOXOXFFXRRSORTO",
-  "DXXXXRRXXXSSOOOXOFFFOOOOO"
+  "SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX",
+  "SSODXFXDOXXOXOXFFXRRSORTOXDOXX",
+  "DXXXXRRXXXSSOOOXOFFFOOOOORFODD"
 )
 
 bdm(multi)
-bdm(multi, span = 5, delta = 2) 
-bdm(multi, delta = 5)
+bdm(multi, delta = 1)
+bdm(multi, span = 5) 
 
 
 # binary bdm should give 57.5664 in this case 
 bdm("010101010101010101", alphabet = 2, span = 12, delta = 1)
 
 # uses a substring of size less than 12:
-bdm("010101010101010101", alphabet = 2, span = 12, delta = 12)
+bdm("010101010101010101", alphabet = 2, span = 12)
 
 }
 

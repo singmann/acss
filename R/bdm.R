@@ -5,14 +5,15 @@
 #' @param string \code{character} vector containing the to be analyzed strings (can contain multiple strings).
 #' @param alphabet \code{numeric}, the number of possible symbols (not necessarily actually appearing in \code{string}). Must be one of \code{c(2, 4, 5, 6, 9)} (must be a scalar value in the current implementation). Default is 9.
 #' @param span size of substrings/windows to be created from \code{string}. Default is 10.
-#' @param delta distance between two windows. Default is 1 corresponding to a full overlap of the substrings. If \code{delta == span} (the maximum) the decomposition is disjoint, hence a partition.
+#' @param delta distance between two windows. Default is \code{delta = span} (the maximum) in which the decomposition is disjoint, hence a partition. In the default setting the last substring is not of length \code{span} if the length of the string is not divisible by \code{span}. If \code{delta = 1} the substrings are all of length \code{span} and maximally overlap. 
+#' @param print_substrings logical. Should substrings be printed to the console? Default is \code{FALSE}. Mainly for debugging purposes. 
 #' 
 #' 
 #' @example examples/examples.bdm.R
 #' 
 
 #' @export
-bdm <- function(string,delta=1,alphabet=9,span=10) 
+bdm <- function(string,delta=span,alphabet=9,span=10, print_substrings=FALSE) 
   {
 # string is the string which BDM is to be computed
 # delta is the distance between two windows
@@ -43,6 +44,10 @@ bdm <- function(string,delta=1,alphabet=9,span=10)
 	  }
 	}
 	substrings <- lapply(seq_along(string), function(x) substring(string[[x]], first = start[[x]], last=stop[[x]]))
+	if (print_substrings) {
+	  names(substrings) <- string
+	  print(substrings)
+	}
 	t_subtrings <- lapply(substrings, table)
 	acss_substr <- lapply(t_subtrings, function(x) acss(rownames(x),alphabet=alphabet)[,1])
 	out <- vapply(seq_along(acss_substr), function(x) sum(log(t_subtrings[[x]], base = alphabet)+acss_substr[[x]]), 0)
