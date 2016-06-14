@@ -1,3 +1,7 @@
+Version 0.3-x
+ o added our BRM paper as vignette
+ o added bdm() function providing the block decomposition method. This allows to obtain acss values for strings larger than those included in our database. 
+
 Version 0.2-5 (November 2014)
 
- o added lattice to Suggests as it is not anymore loaded with effects (needed for example of Experiment 2).
+ o added lattice to Suggests as it is not any more loaded with effects (needed for example of Experiment 2).

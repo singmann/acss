@@ -28,7 +28,7 @@ bdm <- function(string,delta=1,alphabet=9,span=10)
 	if (!(alphabet %in% c(2,4,5,6,9))) stop("alphabet must be in c(2, 4, 5, 6, 9)")
 	if (span<2) stop("span must be an integer larger than 1.")
 	if (span>10) warning("spans larger than 10 might yield NAs", call. = FALSE)
-	if (any(vapply((l-span), `%%`, e2 = delta, 0) != 0)) warning("delta is not a divisor of length-span. The string(s) was not entirely scanned.",call. = FALSE)
+	if (any(vapply((l-span), `%%`, e2 = delta, 0) != 0)) warning("delta is not a divisor of length-span. Not all windows are of size ", span, ".", call. = FALSE)
 	
 	# function
 	#k <- vapply((l-span), FUN = `%/%`, e2 = delta, 0)  # number of substrings to consider
@@ -36,6 +36,12 @@ bdm <- function(string,delta=1,alphabet=9,span=10)
 	#stop <- lapply(start, function(x) x+delta)
 	start <- lapply(l, function(x) seq(1, to = (x-(span-1)), by = delta))
 	stop <- lapply(start, function(x) x+(span-1))
+	for (i in seq_along(string)) {
+	  if (stop[[i]][length(stop[[i]])] != l[i]) {
+	    start[[i]] <- c(start[[i]], start[[i]][length(start[[i]])] + delta)
+	    stop[[i]] <- c(stop[[i]], l[i])
+	  }
+	}
 	substrings <- lapply(seq_along(string), function(x) substring(string[[x]], first = start[[x]], last=stop[[x]]))
 	t_subtrings <- lapply(substrings, table)
 	acss_substr <- lapply(t_subtrings, function(x) acss(rownames(x),alphabet=alphabet)[,1])
