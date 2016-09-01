@@ -4,19 +4,19 @@
 \alias{bdm}
 \title{Block Decomposition Method}
 \usage{
-bdm(string, delta = span, alphabet = 9, span = 10,
-  print_substrings = FALSE)
+bdm(string, blocksize = 10, alphabet = 9, delta = blocksize,
+  print_blocks = FALSE)
 }
 \arguments{
 \item{string}{\code{character} vector containing the to be analyzed strings (can contain multiple strings).}
 
-\item{delta}{distance between two windows. Default is \code{delta = span} (the maximum) in which the decomposition is disjoint, hence a partition. In the default setting the last substring is not of length \code{span} if the length of the string is not divisible by \code{span}. If \code{delta = 1} the substrings are all of length \code{span} and maximally overlap.}
+\item{blocksize}{size of blocks/substrings/windows to be created from \code{string}. Default is 10. Values larger than 10 will elicit a warning as not all strings with length > 10 are represented for all alphabets.}
 
 \item{alphabet}{\code{numeric}, the number of possible symbols (not necessarily actually appearing in \code{string}). Must be one of \code{c(2, 4, 5, 6, 9)} (must be a scalar value in the current implementation). Default is 9.}
 
-\item{span}{size of substrings/windows to be created from \code{string}. Default is 10.}
+\item{delta}{distance between two blocks. Default is \code{delta = blocksize} (the maximum) in which the decomposition is disjoint, hence a partition (i.e., there is no overlap between blocks). In the default setting the last block is not of length \code{blocksize} if the length of the string is not divisible by \code{blocksize}. If \code{delta = 1} the blocks are all of length \code{blocksize} and maximally overlap.}
 
-\item{print_substrings}{logical. Should substrings be printed to the console? Default is \code{FALSE}. Mainly for debugging purposes.}
+\item{print_blocks}{logical. Should blocks be printed to the console? Default is \code{FALSE}. Mainly for debugging purposes.}
 }
 \description{
 Obtain Complexity of Longer Strings than allowed by ACSS via the Block Decomposition Method.
@@ -24,10 +24,10 @@ Obtain Complexity of Longer Strings than allowed by ACSS via the Block Decomposi
 \examples{
 acss("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX")  # too long
 
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX") # default span is 10
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", span = 5)
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", span = 7) # gives warning
-bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", span = 7, delta = 1) 
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX") # default blocksize is 10
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", blocksize = 5)
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", blocksize = 7) # gives warning
+bdm("SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX", blocksize = 7, delta = 1) 
 
 multi <- c(
   "SSOOXFXFOXXOXOXFFXXXSOTTOFFFXX",
@@ -37,14 +37,17 @@ multi <- c(
 
 bdm(multi)
 bdm(multi, delta = 1)
-bdm(multi, span = 5) 
+bdm(multi, blocksize = 5) 
 
 
 # binary bdm should give 57.5664 in this case 
-bdm("010101010101010101", alphabet = 2, span = 12, delta = 1)
+bdm("010101010101010101", alphabet = 2, blocksize = 12, delta = 1)
 
-# uses a substring of size less than 12:
-bdm("010101010101010101", alphabet = 2, span = 12)
+# show all blocks:
+bdm("010101010101010101", alphabet = 2, blocksize = 12, delta = 1, print_blocks = TRUE)
+
+# uses a block of size less than 12:
+bdm("010101010101010101", alphabet = 2, blocksize = 6)
 
 }
 
