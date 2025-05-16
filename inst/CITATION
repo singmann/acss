@@ -3,7 +3,7 @@ citHeader("To cite acss in publications use:")
 citEntry(entry = "Article",
   title        = "Algorithmic complexity for psychology: {A} user-friendly implementation
                of the coding theorem method",
-  author       = personList(
+  author       = c(
                     as.person("Nicolas Gauvrit"),
                     as.person("Henrik Singmann"),
                     as.person("Fernando Soler-Toscano"),
