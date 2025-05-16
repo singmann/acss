@@ -1,8 +1,9 @@
 require(devtools)
 require(roxygen2)
 load_all()
+urlchecker::url_check()
 #dev_mode()
-roxygenise()
+document()
 test()
 options(error = recover)
 
@@ -13,3 +14,4 @@ release(check=FALSE)
 
 
 build_vignettes()
+rhub::rhub_setup()

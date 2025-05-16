@@ -25,7 +25,8 @@ Description: Main functionality is to provide the algorithmic complexity for
     posterior probability that a given string was produced by a random process.
     In addition, two traditional (but problematic) measures of complexity are
     also provided: entropy and change complexity.
-URL: http://complexitycalculator.com/methodology.html
+URL: https://complexity-calculator.com/methodology.html
 License: GPL (>= 2)
-RoxygenNote: 5.0.1
+RoxygenNote: 7.3.2
+Encoding: UTF-8
 VignetteBuilder: knitr

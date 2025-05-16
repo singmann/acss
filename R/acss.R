@@ -19,7 +19,7 @@
 #' 
 #' @return
 #' \describe{
-#'   \item{"acss"}{A matrix in which the rows correspond to the strings entered and the columns to the algorithmic complexity K and the algorithmic probability D of the string (see \url{http://complexitycalculator.com/methodology.html}).}
+#'   \item{"acss"}{A matrix in which the rows correspond to the strings entered and the columns to the algorithmic complexity K and the algorithmic probability D of the string (see \url{https://complexity-calculator.com/methodology.html}).}
 #'   \item{"local_complexity"}{A list with elements corresponding to the strings. Each list containes a named vector of algorithmic complexities (K) of all substrings in each string with length span.}
 #'   \item{"likelihood_d"}{A named vector with the likelihoods for \code{string} given a detreministic process.}
 #'   \item{"likelihood_ratio"}{A named vector with the likelihood ratios (or Bayes factors) for \code{string} given a random rather than detreministic process.}
@@ -32,7 +32,7 @@
 #' 
 #' This package accesses a database containing data on 4.5 million strings from length 1 to 12 simulated on TMs with 2, 4, 5, 6, and 9 symbols. 
 #' 
-#' For a more detailed discussion see Gauvrit, Singmann, Soler-Toscano, and Zenil (2014), \url{http://complexitycalculator.com/methodology.html}, or references below.
+#' For a more detailed discussion see Gauvrit, Singmann, Soler-Toscano, and Zenil (2014), \url{https://complexity-calculator.com/methodology.html}, or references below.
 #' 
 #' @references Delahaye, J.-P., & Zenil, H. (2012). Numerical evaluation of algorithmic complexity for short strings: A glance into the innermost structure of randomness. \emph{Applied Mathematics and Computation}, 219(1), 63-77. doi:10.1016/j.amc.2011.10.006 
 #' 

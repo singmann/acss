@@ -2,10 +2,10 @@
 % Please edit documentation in R/acss.R
 \name{acss}
 \alias{acss}
+\alias{prob_random}
+\alias{local_complexity}
 \alias{likelihood_d}
 \alias{likelihood_ratio}
-\alias{local_complexity}
-\alias{prob_random}
 \title{ACSS complexity}
 \usage{
 acss(string, alphabet = 9)
@@ -29,7 +29,7 @@ prob_random(string, alphabet = 9, prior= 0.5)
 }
 \value{
 \describe{
-  \item{"acss"}{A matrix in which the rows correspond to the strings entered and the columns to the algorithmic complexity K and the algorithmic probability D of the string (see \url{http://complexitycalculator.com/methodology.html}).}
+  \item{"acss"}{A matrix in which the rows correspond to the strings entered and the columns to the algorithmic complexity K and the algorithmic probability D of the string (see \url{https://complexity-calculator.com/methodology.html}).}
   \item{"local_complexity"}{A list with elements corresponding to the strings. Each list containes a named vector of algorithmic complexities (K) of all substrings in each string with length span.}
   \item{"likelihood_d"}{A named vector with the likelihoods for \code{string} given a detreministic process.}
   \item{"likelihood_ratio"}{A named vector with the likelihood ratios (or Bayes factors) for \code{string} given a random rather than detreministic process.}
@@ -46,7 +46,7 @@ The outputs of the TMs at the halting states produces a distribution of strings 
 
 This package accesses a database containing data on 4.5 million strings from length 1 to 12 simulated on TMs with 2, 4, 5, 6, and 9 symbols. 
 
-For a more detailed discussion see Gauvrit, Singmann, Soler-Toscano, and Zenil (2014), \url{http://complexitycalculator.com/methodology.html}, or references below.
+For a more detailed discussion see Gauvrit, Singmann, Soler-Toscano, and Zenil (2014), \url{https://complexity-calculator.com/methodology.html}, or references below.
 }
 \note{
 The first time per session one of the functions described here is used, a relatively large dataset is loaded into memory which can take a considerable amount of time (> 10 seconds).
@@ -130,4 +130,3 @@ Levin, L. A. (1974). Laws of information conservation (nongrowth) and aspects of
 
 Soler-Toscano, F., Zenil, H., Delahaye, J.-P., & Gauvrit, N. (2012). Calculating Kolmogorov Complexity from the Output Frequency Distributions of Small Turing Machines. \emph{PLoS ONE}, 9(5): e96223.
 }
-

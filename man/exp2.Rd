@@ -4,7 +4,9 @@
 \name{exp2}
 \alias{exp2}
 \title{Data from Experiment 2 in Gauvrit, Singmann, Soler-Toscano & Zenil}
-\format{A data.frame with 200 rows and 2 variables.}
+\format{
+A data.frame with 200 rows and 2 variables.
+}
 \source{
 Gauvrit, Singmann, Soler-Toscano & Zenil (submitted). Complexity for psychology. A user-friendly implementation of the coding theorem method.
 }
@@ -40,4 +42,3 @@ panel.lines(c(33,threshold), c(0.5, 0.5), col = "black", lwd = 2.5, lty = 3)
 trellis.unfocus()
 }
 \keyword{dataset}
-

@@ -4,7 +4,9 @@
 \name{exp1}
 \alias{exp1}
 \title{Data from Experiment 1 in Gauvrit, Singmann, Soler-Toscano & Zenil}
-\format{A data.frame with 34 rows and 2 variables.}
+\format{
+A data.frame with 34 rows and 2 variables.
+}
 \source{
 Gauvrit, Singmann, Soler-Toscano & Zenil (submitted). Complexity for psychology. A user-friendly implementation of the coding theorem method.
 }
@@ -38,4 +40,3 @@ t.test(acss(exp1$string, 4)[,"K.4"], mu = mean_K)
 
 }
 \keyword{dataset}
-

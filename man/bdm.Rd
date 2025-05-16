@@ -4,8 +4,13 @@
 \alias{bdm}
 \title{Block Decomposition Method}
 \usage{
-bdm(string, blocksize = 10, alphabet = 9, delta = blocksize,
-  print_blocks = FALSE)
+bdm(
+  string,
+  blocksize = 10,
+  alphabet = 9,
+  delta = blocksize,
+  print_blocks = FALSE
+)
 }
 \arguments{
 \item{string}{\code{character} vector containing the to be analyzed strings (can contain multiple strings).}
@@ -50,4 +55,3 @@ bdm("010101010101010101", alphabet = 2, blocksize = 12, delta = 1, print_blocks 
 bdm("010101010101010101", alphabet = 2, blocksize = 6)
 
 }
-

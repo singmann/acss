@@ -4,7 +4,9 @@
 \name{matthews2013}
 \alias{matthews2013}
 \title{Data from Experiment 1 in Matthews (2013)}
-\format{A data.frame with 216 rows and 3 variables.}
+\format{
+A data.frame with 216 rows and 3 variables.
+}
 \source{
 Matthews, W. (2013). Relatively random: Context effects on perceived randomness and predicted outcomes. \emph{Journal of Experimental Psychology: Learning, Memory, and Cognition}, 39(5), 1642-1648.
 }
@@ -49,4 +51,3 @@ summary(m_step2)
 }
 }
 \keyword{dataset}
-
