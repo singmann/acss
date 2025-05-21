@@ -5,6 +5,7 @@
 # rhub::rhub_setup()
 #
 # It is unlikely that you need to modify this file manually.
+## modified by: https://github.com/r-hub/rhub/issues/643#issuecomment-2778758495
 
 name: R-hub
 run-name: "${{ github.event.inputs.id }}: ${{ github.event.inputs.name || format('Manually run by {0}', github.triggering_actor) }}"

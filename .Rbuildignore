@@ -8,3 +8,6 @@ dev.R
 .github
 ^\.github
 development
+^cran-comments\.md$
+revdep
+^revdep$
