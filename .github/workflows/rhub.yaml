@@ -71,6 +71,7 @@ jobs:
             scheme-medium
             xcolor
             framed
+            texliveonfly
             threeparttable
 
   other-platforms:
