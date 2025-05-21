@@ -37,7 +37,6 @@ jobs:
       with:
         config: ${{ github.event.inputs.config }}
       id: rhub-setup
-    
 
   linux-containers:
     needs: setup
@@ -65,13 +64,6 @@ jobs:
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-      - uses: teatimeguest/setup-texlive-action@v3
-        with:
-          packages: >-
-            latex-bin
-            latex
-            latex-fonts
-            latexextra
 
   other-platforms:
     needs: setup

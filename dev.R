@@ -16,5 +16,5 @@ release(check=FALSE)
 
 
 build_vignettes()
-rhub::rhub_setup()
+rhub::rhub_setup(overwrite = TRUE)
 rhub::rhub_check()
