@@ -1,6 +1,8 @@
-Version 0.3-x
+Version 0.3-x (May 2025)
  o added our BRM paper as vignette
  o added bdm() function providing the block decomposition method. This allows to obtain acss values for strings larger than those included in our database. 
+ o fixed the URLs to use new complexity calculator website
+ o adapted code for use of new version of acss.data (version 1.2)
 
 Version 0.2-5 (November 2014)
 
