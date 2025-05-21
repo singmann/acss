@@ -43,6 +43,6 @@ test_that("Matthews 2013", {
   
   expect_equivalent(round(summary(lm_list[[1]])$r.squared, 2), 0.54)
   expect_equivalent(round(summary(lm_list[[2]])$r.squared, 2), 0.50)
-  expect_less_than(summary(lm_list[[3]])$r.squared, 0.00002)
+  expect_lt(summary(lm_list[[3]])$r.squared, 0.00002)
   rm(matthews2013)
 })

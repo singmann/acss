@@ -7,6 +7,8 @@ document()
 test()
 options(error = recover)
 
+check()
+
 require(testthat)
 test_package("acss")
 help(package = "acss")

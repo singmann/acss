@@ -61,11 +61,11 @@ acss <- function(string, alphabet = 9) { #, return = "matrix") {
 #  return <- match.arg(return, c("matrix", "data.frame"))
   names <- string
   string <- normalize_string(string)
-  if (is.null(alphabet)) tmp <- acss_data[string,]  
+  if (is.null(alphabet)) tmp <- acss.data::acss_data[string,]  
   else {
     alphabet <- as.numeric(alphabet)
     if (any(!(alphabet %in% c(2, 4, 5, 6, 9)))) stop("alphabet must be in c(2, 4, 5, 6, 9)")
-    tmp <- acss_data[string, paste("K", alphabet , sep = "."), drop = FALSE]
+    tmp <- acss.data::acss_data[string, paste("K", alphabet , sep = "."), drop = FALSE]
   }
   D <- apply(tmp, c(1,2), function(x) 2^(-x))
   colnames(D) <- paste0("D.", substr(colnames(D), 3, 3))  
@@ -89,9 +89,9 @@ likelihood_d <- function(string, alphabet = 9) {
   check_string(string)
   l <- nchar(string)
   lu <- unique(l)
-  rn <- nchar(rownames(acss_data))
+  rn <- nchar(rownames(acss.data::acss_data))
   subtables <- lapply(lu, function(x) {
-    tmp <- acss_data[rn == x, paste0("K.", alphabet), drop = FALSE]
+    tmp <- acss.data::acss_data[rn == x, paste0("K.", alphabet), drop = FALSE]
     tmp <- tmp[!is.na(tmp[,paste0("K.", alphabet)]),,drop = FALSE]
     tmp$count <- count_class(rownames(tmp), alphabet = alphabet)
     tmp$D <- 2^(-tmp[,paste0("K.", alphabet)])

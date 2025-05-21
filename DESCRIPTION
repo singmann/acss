@@ -16,6 +16,7 @@ Suggests:
     lattice,
     knitr,
     rmarkdown
+LazyData: true
 Description: Main functionality is to provide the algorithmic complexity for
     short strings, an approximation of the Kolmogorov Complexity of a short
     string using the coding theorem method (see ?acss). The database containing
