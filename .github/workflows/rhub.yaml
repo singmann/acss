@@ -70,7 +70,8 @@ jobs:
           packages:  |
             scheme-medium
             xcolor
-            framed  
+            framed
+            threeparttable
 
   other-platforms:
     needs: setup
