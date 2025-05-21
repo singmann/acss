@@ -11,3 +11,4 @@ development
 ^cran-comments\.md$
 revdep
 ^revdep$
+^CRAN-SUBMISSION$

@@ -23,4 +23,6 @@ devtools::build(path = "development/", args = "--compact-vignettes=both")
 devtools::check_built(path = "development/acss_0.3-2.tar.gz")
 
 devtools::check_win_devel(args = "--compact-vignettes=both")
+devtools::check_mac_release(args = "--compact-vignettes=both")
+
 devtools::submit_cran(args = "--compact-vignettes=both")
